@@ -1,0 +1,55 @@
+/* line 1, ../sass/views/main.scss */
+#main {
+  padding: 20px;
+}
+
+/* line 1, ../sass/views/login.scss */
+#login-form {
+  width: 100%;
+  max-width: 450px;
+  margin: auto;
+}
+
+/* line 4, ../sass/styles.scss */
+body {
+  height: 100%;
+  display: flex;
+  flex-flow: row wrap;
+}
+
+/* line 9, ../sass/styles.scss */
+#navbar {
+  width: 100%;
+  padding: 10px;
+  background-color: #d9d9dd;
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-between;
+}
+/* line 16, ../sass/styles.scss */
+#navbar #title {
+  flex: 1 0 30%;
+}
+/* line 18, ../sass/styles.scss */
+#navbar #title span {
+  font-size: 16px;
+}
+/* line 22, ../sass/styles.scss */
+#navbar ul {
+  padding-left: 0px;
+  margin-bottom: 0px;
+  flex: 2 0 50%;
+  list-style: none;
+  display: flex;
+  flex-flow: row nowrap;
+}
+/* line 29, ../sass/styles.scss */
+#navbar ul li {
+  flex: 1 0 100px;
+  padding-top: 1px;
+}
+
+/* line 36, ../sass/styles.scss */
+#page-view {
+  width: 100%;
+}

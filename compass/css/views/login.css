@@ -1,0 +1,6 @@
+/* line 1, ../../sass/views/login.scss */
+#login-form {
+  width: 100%;
+  max-width: 450px;
+  margin: auto;
+}

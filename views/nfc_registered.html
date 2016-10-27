@@ -1,0 +1,9 @@
+{% extends 'layout.html' %}
+{% block body %}
+
+<h1>Welcome, {{holder[0]}} {{holder[1]}}!
+<small>NFC Tag ID: {{nfc_id}}</small></h1>
+There are now {{nfc_num}} NFC tags registered.
+
+<button type="button" class="btn btn-primary">Go to Admin Portal</button>
+{% endblock %}

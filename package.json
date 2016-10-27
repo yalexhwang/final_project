@@ -1,0 +1,17 @@
+{
+  "name": "mini_city",
+  "version": "1.0.0",
+  "description": "",
+  "main": "scripts.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "angular-scroll": "^1.0.0",
+    "angular-ui-router": "^0.3.1",
+    "connect": "^3.5.0",
+    "serve-static": "^1.11.1"
+  }
+}

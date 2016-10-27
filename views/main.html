@@ -1,0 +1,50 @@
+MAIN
+	<table>
+		<thead>
+			<tr>
+				<th>NFC Tag #</th>
+				<th>Container ID</th>
+				<th>Registered At</th>
+				<th>First Name</th>
+				<th>Middle Name</th>
+				<th>Last Name</th>
+				<th>Age</th>
+				<th>Gender</th>
+				<th>Race</th>
+				<th>DOB</th>
+			</tr>
+		</thead>
+		<tbody>
+	     <tr ng-repeat="nfc in nfcArr track by $index">
+				<td>{{nfc[0]}}</td>
+				<td>{{nfc[1]}}</td>
+				<td>{{nfc[2]}}</td>
+				<td>{{nfc[3]}}</td>
+				<td>{{nfc[4]}}</td>
+				<td>{{nfc[5]}}</td>
+				<td>{{nfc[6]}}</td>
+				<td>{{nfc[7]}}</td>
+				<td>{{nfc[8]}}</td>
+				<td>{{nfc[9]}}</td>
+			</tr>
+		</tbody>
+	</table>
+
+	<table>
+		<thead>
+			<tr>
+				<th>Container #</th>
+				<th>District</th>
+				<th>Zip Code</th>
+				<th>NFC Tags Registered</th>
+			</tr>
+		</thead>
+		<tbody>
+	     <tr ng-repeat="cont in containerArr">
+				<td>{{cont[0]}}</td>
+				<td>{{cont[1]}}</td>
+				<td>{{cont[2]}}</td>
+				<td>{{cont[3]}}</td>
+			</tr>
+		</tbody>
+	</table>
