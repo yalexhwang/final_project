@@ -10,14 +10,37 @@
   margin: auto;
 }
 
-/* line 4, ../sass/styles.scss */
+/* line 1, ../sass/views/register_nfc.scss */
+.admin-section {
+  padding: 10px;
+  width: 300px;
+  margin: auto;
+  text-align: center;
+}
+
+/* line 8, ../sass/views/register_nfc.scss */
+#nfc-id {
+  width: 300px;
+  margin: auto;
+  text-align: center;
+  font-size: 20px;
+}
+
+/* line 15, ../sass/views/register_nfc.scss */
+#nfc-register-main {
+  width: 90%;
+  margin: auto;
+  padding-bottom: 40px;
+}
+
+/* line 5, ../sass/styles.scss */
 body {
   height: 100%;
   display: flex;
   flex-flow: row wrap;
 }
 
-/* line 9, ../sass/styles.scss */
+/* line 10, ../sass/styles.scss */
 #navbar {
   width: 100%;
   padding: 10px;
@@ -26,15 +49,15 @@ body {
   flex-flow: row wrap;
   justify-content: space-between;
 }
-/* line 16, ../sass/styles.scss */
+/* line 17, ../sass/styles.scss */
 #navbar #title {
   flex: 1 0 30%;
 }
-/* line 18, ../sass/styles.scss */
+/* line 19, ../sass/styles.scss */
 #navbar #title span {
   font-size: 16px;
 }
-/* line 22, ../sass/styles.scss */
+/* line 23, ../sass/styles.scss */
 #navbar ul {
   padding-left: 0px;
   margin-bottom: 0px;
@@ -43,13 +66,13 @@ body {
   display: flex;
   flex-flow: row nowrap;
 }
-/* line 29, ../sass/styles.scss */
+/* line 30, ../sass/styles.scss */
 #navbar ul li {
   flex: 1 0 100px;
   padding-top: 1px;
 }
 
-/* line 36, ../sass/styles.scss */
+/* line 37, ../sass/styles.scss */
 #page-view {
   width: 100%;
 }

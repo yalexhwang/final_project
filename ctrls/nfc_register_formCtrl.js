@@ -1,8 +1,25 @@
-mcApp.controller('registerCtrl', function($scope, $rootScope, $http, $state, $cookies, InputService) {
-	console.log('registerCtrl');
-	if ($rootScope.loggedIn == 0) {
-		$state.go('login');
-	}
+mcApp.controller('nfc_register_formCtrl', function($scope, $rootScope, $cookies, $state, AuthService, InputService) {
+	$scope.registered = 0;
+
+	$scope.admin = $cookies.getObject('admin');
+	console.log($scope.admin);
+	$scope.nfc_tag_id = $rootScope.nfc_tag_id;
+	
+	$scope.logOut = function() {
+		console.log($scope.admin);
+		AuthService.logOut($scope.admin[0])
+		.then(function success(rspns) {
+			if (rspns == true) {
+				$cookies.remove('admin');
+				$state.go('register_nfc.login');
+			} else {
+				alert("Please try again.");
+			}
+		}, function fail(rspns) {
+			console.log(rspns);
+			alert("Please try again.");
+		});
+	};
 
 	$scope.enterPOB = 0;
 	$scope.enterParents = 0;
@@ -15,11 +32,7 @@ mcApp.controller('registerCtrl', function($scope, $rootScope, $http, $state, $co
 
 	$scope.register = function() {
 		//NFC exists or not
-		if (($scope.nfc == "") || ($scope.nfc == undefined)) {
-			$scope.newUser.nfc = "";
-		} else {
-			$scope.newUser.nfc = $scope.nfc;
-		}
+		$scope.newUser.nfc = $scope.nfc_tag_id;
 
 		//Convert Date 
 		var dob = $scope.dob;
@@ -46,22 +59,26 @@ mcApp.controller('registerCtrl', function($scope, $rootScope, $http, $state, $co
 		InputService.registerUser($scope.newUser)
 		.then(function success(rspns) {
 			console.log(rspns);
-			$cookies.putObject('newUser', rspns.data.user);
+			$scope.userRegistered = rspns.data.user;
 			if (rspns.data.nfc !== "") {
-				$cookies.putObject('newNfc', rspns.data.nfc);
+				$scope.newNfc = rspns.data.nfc;
 			}
 			if (rspns.data.pob !== "") {
-				$cookies.putObject('pob', rspns.data.pob);
+				$scope.newPob = rspns.data.pob;
+				$scope.withPOB = 1;
+			} else {
+				$scope.withPOB = 0;
 			}
 			if (rspns.data.parents !== "") {
-				$cookies.putObject('parents', rspns.data.parents);
+				$scope.newParents = rspns.data.parents;
+				$scope.withParents = 1;
+			} else {
+				$scope.withParents = 0;
 			}
-			$state.go('home.user_registered');
+			$scope.registered = 1;
 		}, function fail(rspns) {
 			console.log(rspns);
 			alert('Please try again.');
 		});
 	};
-
-
 });

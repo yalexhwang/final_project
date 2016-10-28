@@ -101,14 +101,16 @@ mcApp.config(function($stateProvider, $urlRouterProvider) {
 		controller: 'nfc_registerCtrl'
 	})
 	.state('register_nfc.login', {
-		url: '/register/login',
+		url: '/login',
 		templateUrl: 'views/nfc_register_login.html',
-		controller: 'nfc_registerCtrl'
+		controller: 'nfc_register_loginCtrl'
 	})
 	.state('register_nfc.register', {
-		url: '/register/form',
+		url: '/form',
 		templateUrl: 'views/nfc_register_form.html',
+		controller: 'nfc_register_formCtrl'
 	})
+
 	.state('login', {
 		url: '/',
 		templateUrl: 'views/login.html',
