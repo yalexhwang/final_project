@@ -59,7 +59,12 @@ mcApp.controller('nfc_register_formCtrl', function($scope, $rootScope, $cookies,
 		InputService.registerUser($scope.newUser)
 		.then(function success(rspns) {
 			console.log(rspns);
-			$scope.userRegistered = rspns.data.user;
+			var user = rspns.data.user;
+			user[5] = convertGender(user[5]);
+			user[6] = convertRace(user[6]);
+			user[7] = convertDate(user[7]);
+			user[10] = convertHasId(user[10]);
+			$scope.userRegistered = user;
 			if (rspns.data.nfc !== "") {
 				$scope.newNfc = rspns.data.nfc;
 			}

@@ -2,8 +2,11 @@ from flask import Flask, request, redirect, session, jsonify, json, render_templ
 from flaskext.mysql import MySQL 
 from flask_restful import Resource, Api, reqparse
 from flask_cors import CORS, cross_origin
+from urlparse import urlparse, parse_qs
+from werkzeug import secure_filename
 import datetime as dt
 import uuid 
+import base64
 
 app = Flask(__name__)
 CORS(app)
@@ -174,12 +177,14 @@ def register_user():
 	return jsonify(result)
 
 
-# @app.route('/register/<nfc_id>')
-# def register_nfc(nfc_id):
-# 	print "id: '%s'" % nfc_id
-# 	session['new_nfc'] = nfc_id
-# 	return redirect('http://localhost:8000/#/register/' + nfc_id)
-
+@app.route('/upload_photo', methods=['POST'])
+def upload_photo():
+	photo = request.files['file']
+	photo.save(secure_filename(photo.filename))
+	with open(photo, "rb") as image_file:
+		encoded_string = base64.b64encode(image_file.read())
+		print "encoded_string: '%'" % encoded_string
+	return encoded_string
 
 @app.route('/get/<data>', methods=['GET'])
 def getData(data):
@@ -203,46 +208,71 @@ def getData(data):
 		return jsonify(result)
 
 
-# API
-# @app.route('/register_user/<nfc_id>')
-# def register_n
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# API - - - - - - - - - - - - - - - - - - - - - - - - - -
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-# @app.route('/register_nfc_submit', methods=['POST'])
-# def reigster_nfc_submit():
-# 	today = dt.date.today().strftime("%Y-%m-%d")
-# 	nfc_id = session['nfc_id']
-# 	fname = request.form['fname']
-# 	lname = request.form['lname']
-# 	gender = request.form.get('gender')
-# 	dob = request.form['dob']
-# 	special = request.form.getlist('special')
-# 	special_str = ""
-# 	for i in special:
-# 		special_str += i[0] + ","
-# 	print special_str
-# 	print today
-# 	print nfc_id
-# 	print fname
-# 	print lname
-# 	print gender
-# 	print dob
-# 	print special_str
+@app.route('/users/<nfc_id>', methods=['GET', 'POST', 'PUT'])
+def api_find(nfc_id):
+	if request.method == 'GET':
+		nfc = nfc_id
+		print nfc
+		get_user_query = "SELECT d.nfc_tag_id, d.container, d.registered_at, u.* FROM users as u INNER JOIN devices as d ON u.id = d.user_id WHERE d.nfc_tag_id = '%s'" % nfc
+		cursor.execute(get_user_query)
+		data = cursor.fetchone()
+		print 'data: '
+		print data
 
-# 	new_holder_query = "INSERT INTO users (first_name, last_name, gender, special_status, registered_at, DOB) VALUES ('%s','%s','%s','%s','%s','%s')" % (fname, lname, gender, special_str, today, dob)
-# 	cursor.execute(new_holder_query)
-# 	conn.commit()
+		result = {
+			'nfc_tag': data[0],
+			'container_id': data[1],
+			'registered_at': data[2],
+			'user_dbid': data[3],
+			'name': {
+				'first': data[4],
+				'middle': data[5],
+				'last': data[6]
+			},
+			'age': data[7],
+			'gender': data[8],
+			'race': data[9],
+			'dob': data[10],
+			'hasID': data[11]
+		}
+		get_pob_qeury = "SELECT * from _user_place_of_birth WHERE user_id = '%s'" % result['user_dbid']
+		cursor.execute(get_pob_qeury)
+		data2 = cursor.fetchone()
+		print 'data2:'
+		print data2
+		if data2 is None: 
+			result['pob'] = None
+		else:
+			result['pob'] = {
+				'hospital': data2[1],
+				'city': data2[2],
+				'county': data2[3],
+				'state': data2[4]
+			}
 
-# 	holder_id = cursor.lastrowid
-# 	new_nfc_query = "INSERT INTO nfc (nfc_tag_id, user, registered_at) VALUES ('%s','%s','%s')" % (nfc_id, holder_id, today)
-# 	cursor.execute(new_nfc_query)
-# 	conn.commit()
-# 	nfc_num = cursor.lastrowid
+		get_parents_qeury = "SELECT * from _user_parents WHERE user_id = '%s'" % result['user_dbid']
+		cursor.execute(get_parents_qeury)
+		data3 = cursor.fetchone()
+		print 'data3:'
+		print data3
+		if data3 is None: 
+			result['parents'] = ""
+		else:
+			result['parents'] = {
+				'father': data3[1],
+				'mother': data3[2]
+			}
 
-# 	session.pop('nfc_id', None)
-# 	return render_template('nfc_registered.html', 
-# 			nfc_id = nfc_id,
-# 			nfc_num = nfc_num,
-# 			holder = [fname, lname, gender])
+		print result
+		return jsonify(result)
+	elif request.method == 'PUT':
+		all_args = request.args.to_dict()
+		print all_args
+		return 'hi'
 
 if (__name__) == "__main__":
 	app.run(debug=True, threaded=True)

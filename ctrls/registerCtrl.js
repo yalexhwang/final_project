@@ -1,4 +1,4 @@
-mcApp.controller('registerCtrl', function($scope, $rootScope, $http, $state, $cookies, InputService) {
+mcApp.controller('registerCtrl', function($scope, $rootScope, $http, $state, $cookies, Upload, InputService) {
 	console.log('registerCtrl');
 	if ($rootScope.loggedIn == 0) {
 		$state.go('login');
@@ -12,8 +12,19 @@ mcApp.controller('registerCtrl', function($scope, $rootScope, $http, $state, $co
 	};
 	$scope.parents = {'father': "", 'mother': ""};
 	$scope.pob = {'hospital': "", 'city': "", 'county': "", 'state': ""};
-
-	$scope.register = function() {
+		
+	$scope.upload = function(file) {
+		Upload.upload({
+			url: url + '/upload_photo',
+			data: {file: file}
+		}).then(function success(rsps) {
+			console.log(rsps);
+		}, function fail(rsps) {
+			console.log(rsps);
+		});
+	};
+		
+	$scope.register = function(file) {
 		//NFC exists or not
 		if (($scope.nfc == "") || ($scope.nfc == undefined)) {
 			$scope.newUser.nfc = "";
@@ -41,7 +52,21 @@ mcApp.controller('registerCtrl', function($scope, $rootScope, $http, $state, $co
 		} else {
 			$scope.newUser.hasID = 0;
 		}
-		
+
+		//photo
+		console.log($scope.file);
+		if ($scope.file) {
+			$http.post(url + '/upload_photo', {
+				headers: {
+					'content-type': 'multipart/form-data'
+				}
+			}).then(function success(rspns) {
+
+			}, function fail(rspns) {
+
+			});
+		}
+
 		console.log($scope.newUser);
 		InputService.registerUser($scope.newUser)
 		.then(function success(rspns) {

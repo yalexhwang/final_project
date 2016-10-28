@@ -1,4 +1,4 @@
-var mcApp = angular.module('mcApp', ['ui.router', 'ngCookies', 'ui.bootstrap', 'duScroll']);
+var mcApp = angular.module('mcApp', ['ui.router', 'ngCookies', 'ui.bootstrap', 'ngFileUpload', 'duScroll']);
 var url = "http://localhost:5000";
 
 mcApp.service('AuthService', function($http, $rootScope, $cookies, $q) {
