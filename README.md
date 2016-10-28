@@ -20,5 +20,6 @@ Mini City is a MVP of Mini City's data management portal I built at Goodie Natio
 
 ##Problems Solved
 - **Different data types for date between MySQL and JavaScript**
+- **single thread vs multi threads between Chrome and Flask**
 
 ##Future Implementation
