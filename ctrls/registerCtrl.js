@@ -54,38 +54,44 @@ mcApp.controller('registerCtrl', function($scope, $rootScope, $http, $state, $co
 		}
 
 		//photo
-		console.log($scope.file);
-		if ($scope.file) {
-			$http.post(url + '/upload_photo', {
-				headers: {
-					'content-type': 'multipart/form-data'
-				}
-			}).then(function success(rspns) {
+		var fr = new FileReader();
+		if (document.getElementById('file').files.length > 0) {
+			var photo = document.getElementById('file').files[0];
+			console.log(photo);
+			fr.onloadend = function(e) {
+				var data = e.target.result;
+				$http.post(url + '/upload_photo', {
+					file: data
+				}).then(function success(rspns) {
+					console.log(rspns);
+				}, function fail(rspns) {
 
-			}, function fail(rspns) {
-
-			});
+				});
+			}
 		}
+	
+		// fr.readAsBinaryString(photo);
+		// console.log(photo);
 
 		console.log($scope.newUser);
-		InputService.registerUser($scope.newUser)
-		.then(function success(rspns) {
-			console.log(rspns);
-			$cookies.putObject('newUser', rspns.data.user);
-			if (rspns.data.nfc !== "") {
-				$cookies.putObject('newNfc', rspns.data.nfc);
-			}
-			if (rspns.data.pob !== "") {
-				$cookies.putObject('pob', rspns.data.pob);
-			}
-			if (rspns.data.parents !== "") {
-				$cookies.putObject('parents', rspns.data.parents);
-			}
-			$state.go('home.user_registered');
-		}, function fail(rspns) {
-			console.log(rspns);
-			alert('Please try again.');
-		});
+		// InputService.registerUser($scope.newUser)
+		// .then(function success(rspns) {
+		// 	console.log(rspns);
+		// 	$cookies.putObject('newUser', rspns.data.user);
+		// 	if (rspns.data.nfc !== "") {
+		// 		$cookies.putObject('newNfc', rspns.data.nfc);
+		// 	}
+		// 	if (rspns.data.pob !== "") {
+		// 		$cookies.putObject('pob', rspns.data.pob);
+		// 	}
+		// 	if (rspns.data.parents !== "") {
+		// 		$cookies.putObject('parents', rspns.data.parents);
+		// 	}
+		// 	$state.go('home.user_registered');
+		// }, function fail(rspns) {
+		// 	console.log(rspns);
+		// 	alert('Please try again.');
+		// });
 	};
 
 

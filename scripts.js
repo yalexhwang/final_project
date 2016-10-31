@@ -68,8 +68,9 @@ mcApp.service('AuthService', function($http, $rootScope, $cookies, $q) {
 });
 
 mcApp.service('DataService', function($http, $rootScope, $q) {
-	var def = $q.defer();
+
 	this.getData = function(data) {
+		var def = $q.defer();
 		$http.get(url + '/get/' + data)
 		.then(function success(rspns) {
 			def.resolve(rspns);
@@ -78,6 +79,37 @@ mcApp.service('DataService', function($http, $rootScope, $q) {
 		});
 		return def.promise;
 	}	
+
+	this.getServiceData = function(svc_id) {
+		var def = $q.defer();
+		$http.get(url + '/services/' + svc_id)
+		.then(function success(rspns) {
+			def.resolve(rspns);
+		}, function fail(rspns) {
+			def.reject(rspns);
+		});
+		return def.promise;
+	}
+
+	this.getAllUsers = function() {
+		var def = $q.defer();
+		$http.get(url + '/users').then(function success(rspns) {
+			def.resolve(rspns);
+		}, function fail(rspns) {
+			def.reject(rspns);
+		});
+		return def.promise;
+	}
+
+	this.getUser = function(nfcId) {
+		var def = $q.defer();
+		$http.get(url + '/users/' + nfcId).then(function success(rspns) {
+			def.resolve(rspns);
+		}, function fail(rspns) {
+			def.reject(rspns);
+		});
+		return def.promise;
+	}
 });
 
 mcApp.service('InputService', function($http, $rootScope, $q) {
@@ -91,23 +123,33 @@ mcApp.service('InputService', function($http, $rootScope, $q) {
 		});
 		return def.promise;
 	};
+
+	this.addEvent = function(eventObj) {
+		$http.post(url + '/add_event', eventObj)
+		.then(function success(rspns) {
+			def.resolve(rspns);
+		}, function fail(rspns) {
+			def.reject(rspns);
+		});
+		return def.promise;
+	}
 });
 
 mcApp.config(function($stateProvider, $urlRouterProvider) {
 	$stateProvider
 	.state('register_nfc', {
 		url: '/register/:nfc_tag_id',
-		templateUrl: 'views/nfc_register.html',
+		templateUrl: 'views/scanner/nfc_register.html',
 		controller: 'nfc_registerCtrl'
 	})
 	.state('register_nfc.login', {
 		url: '/login',
-		templateUrl: 'views/nfc_register_login.html',
+		templateUrl: 'views/scanner/nfc_register_login.html',
 		controller: 'nfc_register_loginCtrl'
 	})
 	.state('register_nfc.register', {
 		url: '/form',
-		templateUrl: 'views/nfc_register_form.html',
+		templateUrl: 'views/scanner/nfc_register_form.html',
 		controller: 'nfc_register_formCtrl'
 	})
 
@@ -126,6 +168,16 @@ mcApp.config(function($stateProvider, $urlRouterProvider) {
 		templateUrl: 'views/main.html',
 		controller: 'mainCtrl'
 	})
+	.state('home.users', {
+		url: '/users',
+		templateUrl: 'views/users.html',
+		controller: 'usersCtrl'
+	})
+	.state('home.userDetail', {
+		url: '/user_detail',
+		templateUrl: 'views/user_detail.html',
+		controller: 'userDetailCtrl'
+	})
 	.state('home.register_user', {
 		url: '/register_user',
 		templateUrl: 'views/register.html',
@@ -136,6 +188,48 @@ mcApp.config(function($stateProvider, $urlRouterProvider) {
 		templateUrl: 'views/user_registered.html',
 		controller: 'user_registeredCtrl'
 	})
+	.state('home.users.find_user', {
+		url: '/find_user',
+		templateUrl: 'views/find_user.html',
+		controller: 'find_userCtrl'
+	})
+
+	.state('home.services', {
+		url: '/services',
+		templateUrl: 'views/services.html',
+		controller: 'servicesCtrl'
+	})
+	.state('home.service1', {
+		url: '/service1',
+		templateUrl: 'views/service1.html',
+		controller: 'service1Ctrl'
+	})
+	.state('home.service2', {
+		url: '/service2',
+		templateUrl: 'views/service2.html',
+		controller: 'service2Ctrl'
+	})
+	.state('home.service3', {
+		url: '/service3',
+		templateUrl: 'views/service3.html',
+		controller: 'service3Ctrl'
+	})
+	.state('home.service4', {
+		url: '/service4',
+		templateUrl: 'views/service4.html',
+		controller: 'service4Ctrl'
+	})
+	.state('home.add_event', {
+		url: '/add_event',
+		templateUrl: 'views/add_event.html',
+		controller: 'add_eventCtrl'
+	})
+	.state('home.event_added', {
+		url: '/event_added',
+		templateUrl: 'views/event_added.html',
+		controller: 'event_addedCtrl'
+	})
+
 	.state('home.database', {
 		url: '/database',
 		templateUrl: 'views/database.html',
@@ -154,10 +248,25 @@ mcApp.config(function($stateProvider, $urlRouterProvider) {
 
 function convertDate(dateStr) {
 	var date = new Date(dateStr);
-	// console.log(date.getUTCFullYear() + '-' + ('00' + (date.getUTCMonth() + 1)).slice(-2) + '-' +
- //            ('00' + date.getUTCDate()).slice(-2));
 	return date.getUTCFullYear() + '-' + ('00' + (date.getUTCMonth() + 1)).slice(-2) + '-' +
             ('00' + date.getUTCDate()).slice(-2);
+}
+
+function convertTime(timeStr) {
+	var time = new Date(timeStr);
+	var hr = time.getUTCHours();
+	var min = time.getUTCMinutes();
+	if (min < 10) {
+		min = "0" + min.toString();
+	}
+	if (hr > 12) {
+		hr = hr - 12;
+		return hr + ":" + min + " PM";
+	} else if (hr == 12) {
+		return hr + ":" + min + " PM";
+	} else {
+		return hr + ":" + min + " AM";
+	}
 }
 
 function convertGender(gender) {

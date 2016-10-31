@@ -1,0 +1,21 @@
+A new {{category}} event has been created:
+<table class="table">
+	<tr>
+		<td>Name</td>
+		<td>{{event.name}}</td>
+	</tr>
+	<tr>
+		<td>Where</td>
+		<td>{{event.address}} {{event.city}}, {{event.state}} {{event.zipcode}}</td>
+	</tr>
+	<tr>
+		<td>When</td>
+		<td>{{event.datetime}}</td>
+	</tr>
+	<tr>
+		<td>Contact</td>
+		<td>{{event.contact}}</td>
+	</tr>
+</table>
+
+<button class="btn btn-default" type="button"><a ui-sref="home.services">OK</a></button>

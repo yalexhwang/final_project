@@ -1,0 +1,25 @@
+<button type="button" class="btn btn-sm btn-default"><a ui-sref="home.services">Back</a></button>
+<h2 id="physical">Physical Nourishment Service</h2>
+<hr>
+<button type="button" class="btn btn-default"><a ui-sref="home.add_event">Add an Event</a></button>
+
+<table class="table">
+	<thead>
+		<tr>
+			<th>Event Name</th>
+			<th>Container</th>
+			<th>Location</th>
+			<th>Date & Time</th>
+			<th>Contact</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr ng-repeat="event in physicalEventsArr track by $index">
+			<td>{{event.name}}</td>
+			<td>{{event.container}}</td>
+			<td>{{event.location.address}} {{event.location.city}} {{event.location.state}} {{event.location.zipcode}}</td>
+			<td>{{event.datetime}}</td>
+			<td>{{event.contact}}</td>
+		</tr>
+	</tbody>
+</table>
