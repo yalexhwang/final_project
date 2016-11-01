@@ -1,5 +1,5 @@
 <button type="button" class="btn btn-sm btn-default"><a ui-sref="home.users">Back</a></button>
-<form ng-submit=register() class="form-horizontal">
+<form ng-submit=register() class="form-horizontal" name="form">
 	<div class="form-group">
 		<label for="holder-nfc">NFC Tag ID</label>
 		<input type="text" id="holder-nfc" class="form-control" ng-model="nfc">
@@ -41,12 +41,12 @@
 		<label for="holder-dob">Date of Birth</label>
 		<input type="date" id="holder-dob" class="form-control" ng-model="dob">
 	</div>
-
 	<div class="form-group">
 		<label for="holder-photo">Photo</label>
-		<input type="file" name="file" id="file" class="form-control" ng-model="file">		
+		<input type="file" name="file" id="file" class="form-control" ng-model="file">
 	</div>
-
+	<div id="preview" ng-show="previewReady"></div>
+	
 	<div class="form-group">
 		<div class="checkbox">
 			<label>

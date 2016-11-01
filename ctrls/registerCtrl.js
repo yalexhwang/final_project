@@ -4,6 +4,7 @@ mcApp.controller('registerCtrl', function($scope, $rootScope, $http, $state, $co
 		$state.go('login');
 	}
 
+	$scope.previewReady = 0;
 	$scope.enterPOB = 0;
 	$scope.enterParents = 0;
 	$scope.newUser = {
@@ -13,16 +14,6 @@ mcApp.controller('registerCtrl', function($scope, $rootScope, $http, $state, $co
 	$scope.parents = {'father': "", 'mother': ""};
 	$scope.pob = {'hospital': "", 'city': "", 'county': "", 'state': ""};
 		
-	$scope.upload = function(file) {
-		Upload.upload({
-			url: url + '/upload_photo',
-			data: {file: file}
-		}).then(function success(rsps) {
-			console.log(rsps);
-		}, function fail(rsps) {
-			console.log(rsps);
-		});
-	};
 		
 	$scope.register = function(file) {
 		//NFC exists or not
@@ -54,44 +45,68 @@ mcApp.controller('registerCtrl', function($scope, $rootScope, $http, $state, $co
 		}
 
 		//photo
-		var fr = new FileReader();
-		if (document.getElementById('file').files.length > 0) {
-			var photo = document.getElementById('file').files[0];
-			console.log(photo);
-			fr.onloadend = function(e) {
-				var data = e.target.result;
-				$http.post(url + '/upload_photo', {
-					file: data
-				}).then(function success(rspns) {
-					console.log(rspns);
-				}, function fail(rspns) {
-
-				});
-			}
-		}
-	
-		// fr.readAsBinaryString(photo);
-		// console.log(photo);
-
-		console.log($scope.newUser);
-		// InputService.registerUser($scope.newUser)
-		// .then(function success(rspns) {
-		// 	console.log(rspns);
-		// 	$cookies.putObject('newUser', rspns.data.user);
-		// 	if (rspns.data.nfc !== "") {
-		// 		$cookies.putObject('newNfc', rspns.data.nfc);
-		// 	}
-		// 	if (rspns.data.pob !== "") {
-		// 		$cookies.putObject('pob', rspns.data.pob);
-		// 	}
-		// 	if (rspns.data.parents !== "") {
-		// 		$cookies.putObject('parents', rspns.data.parents);
-		// 	}
-		// 	$state.go('home.user_registered');
-		// }, function fail(rspns) {
-		// 	console.log(rspns);
-		// 	alert('Please try again.');
-		// });
+		var photo = document.getElementById('file').files[0];
+    console.log(photo);
+    if (photo == undefined) {
+    	console.log($scope.newUser);
+			InputService.registerUser($scope.newUser)
+			.then(function success(rspns) {
+				console.log(rspns);
+				$cookies.putObject('newUser', rspns.data.user);
+				if (rspns.data.nfc !== "") {
+					$cookies.putObject('newNfc', rspns.data.nfc);
+				}
+				if (rspns.data.pob !== "") {
+					$cookies.putObject('pob', rspns.data.pob);
+				}
+				if (rspns.data.parents !== "") {
+					$cookies.putObject('parents', rspns.data.parents);
+				}
+				$state.go('home.user_registered');
+			}, function fail(rspns) {
+				console.log(rspns);
+				alert('Please try again.');
+			});
+    } else {
+    	 if (photo.size > 200000) {
+	    	alert('It exceeds the size limit (2MB)');
+	    } else {
+	    	console.log('!!!');
+	    	var reader = new FileReader();
+		    reader.readAsDataURL(photo);
+		    reader.onload = function() {
+		      console.log(reader.result);
+		      $scope.newUser.photo = reader.result;
+		      $scope.previewReady = 1;
+		      var img = document.getElementById('preview');
+		      img.innerHTML = "<img src=" + reader.result + ">"
+		    	console.log($scope.newUser);
+					InputService.registerUser($scope.newUser)
+					.then(function success(rspns) {
+						console.log(rspns);
+						$cookies.putObject('newUser', rspns.data.user);
+						if (rspns.data.nfc !== "") {
+							$cookies.putObject('newNfc', rspns.data.nfc);
+						}
+						if (rspns.data.pob !== "") {
+							$cookies.putObject('pob', rspns.data.pob);
+						}
+						if (rspns.data.parents !== "") {
+							$cookies.putObject('parents', rspns.data.parents);
+						}
+						$state.go('home.user_registered');
+					}, function fail(rspns) {
+						console.log(rspns);
+						alert('Please try again.');
+					});
+		    };
+		    reader.onerror = function(error) {
+		      console.log('Error: ', error);
+		    };
+	    }
+    }
+   
+		
 	};
 
 

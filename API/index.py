@@ -141,9 +141,10 @@ def register_user():
 @app.route('/upload_photo', methods=['POST'])
 def upload_photo():
 	print 'upload-photo'
-	photo = request.files['file']
-	print 'photo'
-	print photo
+	data = request.get_json()
+	blob = data['file']
+	print blob
+	return blob
 	photo.save(secure_filename(photo.filename))
 	with open(photo, "rb") as image_file:
 		encoded_string = base64.b64encode(image_file.read())
