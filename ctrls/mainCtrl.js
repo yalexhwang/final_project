@@ -1,5 +1,4 @@
 mcApp.controller('mainCtrl', function($scope, $rootScope, $state, $cookies, DataService) {
-	console.log('mainCtrl');
 	if ($rootScope.loggedIn == 0) {
 		$state.go('login');
 	} 
@@ -16,12 +15,13 @@ mcApp.controller('mainCtrl', function($scope, $rootScope, $state, $cookies, Data
 			nfc[i][9] = convertDate(nfc[i][9]);
 			$scope.nfcArr.push(nfc[i]);		
 		}
-
 		$scope.containerArr = [];
 		var cont = rspns.data.container;
 		for (var i = 0; i < cont.length; i++) {
 			$scope.containerArr.push(cont[i]);
 		}
+		$scope.numOfNfc = $scope.nfcArr.length;
+		$scope.numOfCont = $scope.containerArr.length;
 	}, function fail(rspns) {
 		console.log('error: ' + rspns);
 	});

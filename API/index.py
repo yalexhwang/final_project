@@ -1,28 +1,26 @@
-from flask import Flask, request, redirect, session, jsonify, json, render_template
+from flask import Flask, request, jsonify
 from flaskext.mysql import MySQL 
 from flask_cors import CORS, cross_origin
-from urlparse import urlparse, parse_qs
-from werkzeug import secure_filename
 import datetime as dt
 import uuid 
 import base64
 
 app = Flask(__name__)
 CORS(app)
+
 mysql = MySQL()
 app.config['MYSQL_DATABASE_USER'] = 'x'
 app.config['MYSQL_DATABASE_PASSWORD'] = 'x'
 app.config['MYSQL_DATABASE_DB'] = 'mini_city'
 app.config['MYSQL_DATABASE_HOST'] = '127.0.0.1'
 mysql.init_app(app)
-
+app.secret_key = "dkssud#$&109ghkddP-dms"
 conn = mysql.connect()
 cursor = conn.cursor()
-app.secret_key = "dkssud#$&109ghkddP-dms"
+
 
 @app.route('/login', methods=['POST'])
 def login():
-	print "/login"
 	data = request.get_json()
 	adminName = data['adminName']
 	password = data['password'].encode('utf-8')
@@ -32,10 +30,8 @@ def login():
 	if admin is None:
 		result = {'passFail': 0,
 			'status': 'Found 0 match'}
-		return jsonify(result)
 	else:
 		token = str(uuid.uuid1())
-		print 'token: %s' % token
 		token_query = "UPDATE admin SET temp_token = '%s' WHERE id = '%s'" % (token, admin[0])
 		cursor.execute(token_query)
 		conn.commit()
@@ -43,11 +39,10 @@ def login():
 		admin[4] = token
 		result = {'passFail': 1,
 			'obj' : admin}
-		return jsonify(result)
+	return jsonify(result)
 
 @app.route('/isLoggedIn', methods=['POST'])
 def isLoggedin():
-	print '/isLoggedIn'
 	data = request.get_json()
 	admin = data['admin']
 	match_query = "SELECT * FROM admin WHERE id = '%s' AND temp_token = '%s'" % (admin[0], admin[4])
@@ -76,7 +71,7 @@ def logout():
 def register_user():
 	data = request.get_json()
 	print data
-	new_user_query = "INSERT INTO users (first_name, middle_name, last_name, age, gender, race, date_of_birth, has_id) VALUES ('%s','%s','%s','%s','%s','%s','%s','%s')" % (data['fname'], data['mname'], data['lname'], int(data['age']), data['gender'], data['race'], data['dob'], data['hasID'])
+	new_user_query = "INSERT INTO users (first_name, middle_name, last_name, age, gender, race, date_of_birth, photo, has_id) VALUES ('%s','%s','%s','%s','%s','%s','%s','%s','%s')" % (data['fname'], data['mname'], data['lname'], int(data['age']), data['gender'], data['race'], data['dob'], data['photo'], data['hasID'])
 	cursor.execute(new_user_query)
 	conn.commit()
 	new_user_id = cursor.lastrowid
@@ -138,64 +133,211 @@ def register_user():
 	return jsonify(result)
 
 
-@app.route('/upload_photo', methods=['POST'])
-def upload_photo():
-	print 'upload-photo'
-	data = request.get_json()
-	blob = data['file']
-	print blob
-	return blob
-	photo.save(secure_filename(photo.filename))
-	with open(photo, "rb") as image_file:
-		encoded_string = base64.b64encode(image_file.read())
-		print "encoded_string: '%'" % encoded_string
-	return encoded_string
+# @app.route('/add_event', methods=['POST'])
+# def add_event():
+# 	data = request.get_json()
+# 	print data
+# 	name = data['name']
+# 	contact = data['contact']
+# 	container = data['container']
+# 	address = data['location']['address']
+# 	city = data['location']['city']
+# 	state = data['location']['state']
+# 	zipcode = data['location']['zipcode']
+# 	when = data['datetime']['year'] + "-" + data['datetime']['month'] + "-" + data['datetime']['date'] + " " + data['datetime']['hour'] + ':' + data['datetime']['min'] + ":00"
+# 	add_event_query = ""
+# 	if data['category'] == '0':
+# 		#physical nourishment
+# 		add_event_query = "INSERT INTO svc_physical values (default, '%s','%s','%s','%s','%s','%s','%s','%s')" % (name, int(container), address, city, state, zipcode, when, contact)
+# 	elif data['category'] == '1':
+# 		#wellness
+# 		add_event_query = "INSERT INTO svc_wellness values (default, '%s','%s','%s','%s','%s','%s','%s','%s')" % (name, int(container), address, city, state, zipcode, when, contact)
+# 	print 'query:'
+# 	print add_event_query
+# 	cursor.execute(add_event_query)
+# 	conn.commit()
+# 	event_id = cursor.lastrowid
+# 	get_event_query = ""
+# 	if data['category'] == '0':
+# 		get_event_query = "SELECT * FROM svc_physical WHERE id = '%s'" % event_id
+# 	elif data['category'] == '1':
+# 		get_event_query = "SELECT * FROM svc_wellness WHERE id = '%s'" % event_id
+# 	cursor.execute(get_event_query)
+# 	event = cursor.fetchone()
+# 	print 'event'
+# 	print event
+# 	result = {
+# 		'name': event[1],
+# 		'container': event[2],
+# 		'address': event[3],
+# 		'city': event[4],
+# 		'state': event[5],
+# 		'zipcode': event[6],
+# 		'datetime': event[7],
+# 		'contact': event[8],
+# 		'category': data['category']
+# 	}
+# 	return jsonify(result)
 
-@app.route('/add_event', methods=['POST'])
-def add_event():
+@app.route('/edit_user', methods=['POST'])
+def edit_user():
 	data = request.get_json()
 	print data
+	userObj = data['obj']
+	target = data['type']
+	user_dbid = int(data['obj']['dbid'])
+	print userObj
+	print "target: %s" % target
+	print "user_dbid: %s" % user_dbid
+	if target == 'user':
+		print "target is user!"
+		if userObj['name']['first'] != "" and userObj['name']['last'] != "":
+			update_user_query = "UPDATE users SET first_name = '%s', middle_name = '%s', last_name = '%s' WHERE id = '%s'" % (userObj['name']['first'], userObj['name']['middle'], userObj['name']['last'], user_dbid)
+			cursor.execute(update_user_query)
+			conn.commit()
+			print update_user_query
+		if userObj['age']:
+			update_user_query = "UPDATE users SET age = '%s' WHERE id = '%s'" % (userObj['age'], user_dbid)
+			cursor.execute(update_user_query)
+			conn.commit()
+			print update_user_query
+		if userObj['gender']:
+			update_user_query = "UPDATE users SET gender = '%s' WHERE id = '%s'" % (userObj['gender'], user_dbid)
+			cursor.execute(update_user_query)
+			conn.commit()
+			print update_user_query
+		if userObj['race']:
+			update_user_query = "UPDATE users SET race = '%s' WHERE id = '%s'" % (userObj['race'], user_dbid)
+			cursor.execute(update_user_query)
+			conn.commit()
+			print update_user_query
+		if userObj['dob']:
+			update_user_query = "UPDATE users SET date_of_birth = '%s' WHERE id = '%s'" % (userObj['dob'], user_dbid)
+			cursor.execute(update_user_query)
+			conn.commit()
+			print update_user_query
+	if target == 'pob':
+		if userObj['new'] == 1:
+			add_pob_query = "INSERT INTO _user_place_of_birth (hospital, city, county, state, user_id) VALUES ('%s','%s','%s','%s','%s')" % (userObj['hospital'], userObj['city'], userObj['county'], userObj['state'], user_dbid)
+			cursor.execute(add_pob_query)
+			conn.commit()
+			print cursor.lastrowid
+			new_pob_id = cursor.lastrowid
+			update_user_query = "UPDATE users SET place_of_birth = '%s' WHERE id = '%s'" % (new_pob_id, user_dbid)
+			cursor.execute(update_user_query)
+			conn.commit()
+			print "update_user_query Executed: %s" % cursor.lastrowid
+		else:
+			update_pob_query = "UPDATE _user_place_of_birth SET hospital = '%s', city = '%s', county = '%s', state = '%s', user_id = '%s'" % (userObj['hospital'], userObj['city'], userObj['county'], userObj['state'], user_dbid)
+			cursor.execute(update_pob_query)
+			conn.commit()
+			print cursor.lastrowid
+
+	if target == 'parents':
+		if userObj['new'] == 1:
+			add_parents_query = "INSERT INTO _user_parents (father_full_name, mother_full_name, user_id) VALUES ('%s','%s','%s')" % (userObj['father'], userObj['mother'], user_dbid)
+			cursor.execute(add_parents_query)
+			conn.commit()
+			new_parents_id = cursor.lastrowid
+			update_user_query = "UPDATE users SET parents = '%s' WHERE id = '%s'" % (new_parents_id, user_dbid)
+			cursor.execute(update_user_query)
+			conn.commit()
+		else: 
+			update_parents_query = "UPDATE _user_parents SET father_full_name = '%s', mother_full_name = '%s' WHERE user_id = '%s'" % (userObj['father'], userObj['mother'], user_dbid)
+			cursor.execute(update_parents_query)
+			conn.commit()
+	if target == 'hasID':
+		update_user_query = "UPDATE users SET has_id = '%s' WHERE id = '%s'" % (int(userObj['hasID']), user_dbid)
+		cursor.execute(update_user_query)
+		print update_user_query
+		conn.commit()
+	return 'updated'
+
+@app.route('/edit_event', methods=['POST'])
+def edit_event():
+	data = request.get_json()
+	print data
+	dbid = int(data['dbid'])
+	print 'dbid: %s' % dbid
 	name = data['name']
 	contact = data['contact']
-	container = int(data['container'])
+	container = data['container']
 	address = data['location']['address']
 	city = data['location']['city']
 	state = data['location']['state']
 	zipcode = data['location']['zipcode']
-	when = data['datetime']['year'] + "-" + data['datetime']['month'] + "-" + data['datetime']['date'] + " " + data['datetime']['hour'] + ':' + data['datetime']['min'] + ":00"
-	add_event_query = ""
-	if data['category'] == '0':
-		#physical nourishment
-		add_event_query = "INSERT INTO svc_physical values (default, '%s','%s','%s','%s','%s','%s','%s','%s')" % (name, container, address, city, state, zipcode, when, contact)
-	elif data['category'] == '1':
-		#wellness
-		add_event_query = "INSERT INTO svc_wellness values (default, '%s','%s','%s','%s','%s','%s','%s','%s')" % (name, container, address, city, state, zipcode, when, contact)
-	print 'query:'
-	print add_event_query
-	cursor.execute(add_event_query)
-	conn.commit()
-	event_id = cursor.lastrowid
-	get_event_query = ""
-	if data['category'] == '0':
-		get_event_query = "SELECT * FROM svc_physical WHERE id = '%s'" % event_id
-	elif data['category'] == '1':
-		get_event_query = "SELECT * FROM svc_wellness WHERE id = '%s'" % event_id
-	cursor.execute(get_event_query)
-	event = cursor.fetchone()
-	print 'event'
-	print event
-	result = {
-		'name': event[1],
-		'container': event[2],
-		'address': event[3],
-		'city': event[4],
-		'state': event[5],
-		'zipcode': event[6],
-		'datetime': event[7],
-		'contact': event[8],
-		'category': data['category']
-	}
-	return jsonify(result)
+	if data['category'] == "0":
+		if name != "":
+			update_name_query = "UPDATE svc_physical SET event_name = '%s' WHERE id = '%s'" % (name, dbid)
+			cursor.execute(update_name_query)
+			conn.commit()
+		if contact != "":
+			update_contact_query = "UPDATE svc_physical SET contact = '%s' WHERE id = '%s'" % (contact, dbid)
+			cursor.execute(update_contact_query)
+			conn.commit()
+		if container != "":
+			update_container_query = "UPDATE svc_physical SET container_id = '%s' WHERE id = '%s'" % (container, dbid)
+			cursor.execute(update_container_query)
+			conn.commit()
+		if address != "":
+			update_address_query = "UPDATE svc_physical SET address = '%s' WHERE id = '%s'" % (address, dbid)
+			cursor.execute(update_address_query)
+			conn.commit()
+		if city != "":
+			update_city_query = "UPDATE svc_physical SET city = '%s' WHERE id = '%s'" % (city, dbid)
+			cursor.execute(update_city_query)
+			conn.commit()
+		if state != "":
+			update_state_query = "UPDATE svc_physical SET state = '%s' WHERE id = '%s'" % (state, dbid)
+			cursor.execute(update_state_query)
+			conn.commit()
+		if zipcode != "":
+			update_zipcode_query = "UPDATE svc_physical SET zipcode = '%s' WHERE id = '%s'" % (zipcode, dbid)
+			cursor.execute(update_zipcode_query)
+			conn.commit()
+		if data['datetime']['year'] != "" and data['datetime']['month'] != "" and data['datetime']['date'] != "" and data['datetime']['hour'] != "" and data['datetime']['min'] != "" :
+			when = data['datetime']['year'] + "-" + data['datetime']['month'] + "-" + data['datetime']['date'] + " " + data['datetime']['hour'] + ':' + data['datetime']['min'] + ":00"
+			update_datetime_query = "UPDATE svc_physical SET date_time = '%s' WHERE id = '%s'" % (when, dbid)
+			cursor.execute(update_datetime_query)
+			conn.commit()
+		return "A Wellness Service has been updated."
+	elif data['category'] == "1":
+		if name != "":
+			update_name_query = "UPDATE svc_wellness SET event_name = '%s' WHERE id = '%s'" % (name, dbid)
+			cursor.execute(update_name_query)
+			conn.commit()
+		if contact != "":
+			update_contact_query = "UPDATE svc_wellness SET contact = '%s' WHERE id = '%s'" % (contact, dbid)
+			cursor.execute(update_contact_query)
+			conn.commit()
+		if container != "":
+			update_container_query = "UPDATE svc_wellness SET container_id = '%s' WHERE id = '%s'" % (container, dbid)
+			cursor.execute(update_container_query)
+			conn.commit()
+		if address != "":
+			update_address_query = "UPDATE svc_wellness SET address = '%s' WHERE id = '%s'" % (address, dbid)
+			cursor.execute(update_address_query)
+			conn.commit()
+		if city != "":
+			update_city_query = "UPDATE svc_wellness SET city = '%s' WHERE id = '%s'" % (city, dbid)
+			cursor.execute(update_city_query)
+			conn.commit()
+		if state != "":
+			update_state_query = "UPDATE svc_wellness SET state = '%s' WHERE id = '%s'" % (state, dbid)
+			cursor.execute(update_state_query)
+			conn.commit()
+		if zipcode != "":
+			update_zipcode_query = "UPDATE svc_wellness SET zipcode = '%s' WHERE id = '%s'" % (zipcode, dbid)
+			cursor.execute(update_zipcode_query)
+			conn.commit()
+		if data['datetime']['year'] != "" and data['datetime']['month'] != "" and data['datetime']['date'] != "" and data['datetime']['hour'] != "" and data['datetime']['min'] != "" :
+			when = data['datetime']['year'] + "-" + data['datetime']['month'] + "-" + data['datetime']['date'] + " " + data['datetime']['hour'] + ':' + data['datetime']['min'] + ":00"
+			update_datetime_query = "UPDATE svc_wellness SET date_time = '%s' WHERE id = '%s'" % (when, dbid)
+			cursor.execute(update_datetime_query)
+			conn.commit()
+		return "A Wellness Service has been updated."
+	else: 
+		return "Error: try again."
 
 
 @app.route('/get/<where>', methods=['GET'])
@@ -257,19 +399,16 @@ def api_all_users():
 @app.route('/users/<nfc_id>', methods=['GET', 'POST'])
 def api_users(nfc_id):
 	if request.method == 'GET':
-		nfc = nfc_id
-		print nfc
-		get_user_query = "SELECT d.nfc_tag_id, d.container, d.registered_at, u.* FROM users as u INNER JOIN devices as d ON u.id = d.user_id WHERE d.nfc_tag_id = '%s'" % nfc
+		get_user_query = "SELECT d.nfc_tag_id, d.container, d.registered_at, u.* FROM users as u INNER JOIN devices as d ON u.id = d.user_id WHERE d.nfc_tag_id = '%s'" % nfc_id
 		cursor.execute(get_user_query)
 		data = cursor.fetchone()
-		print 'data: '
+		print 'data'
 		print data
-
 		result = {
-			'nfc_tag': data[0],
+			'nfc_tag_id': data[0],
 			'container_id': data[1],
 			'registered_at': data[2],
-			'user_dbid': data[3],
+			'dbid': data[3],
 			'name': {
 				'first': data[4],
 				'middle': data[5],
@@ -279,46 +418,54 @@ def api_users(nfc_id):
 			'gender': data[8],
 			'race': data[9],
 			'dob': data[10],
-			'hasID': data[11]
+			'photo': data[11],
+			'hasID': data[13]
 		}
-		get_pob_query = "SELECT * from _user_place_of_birth WHERE user_id = '%s'" % result['user_dbid']
-		cursor.execute(get_pob_query)
-		data2 = cursor.fetchone()
-		print 'data2:'
-		print data2
-		if data2 is None: 
-			result['pob'] = None
+		if data[12] != 0:
+			#employment
+			get_employment_query = "SELECT * from _user_employment WHERE user_id = '%s'" % result['dbid']
+			cursor.execute(get_employment_query)
+			emp = cursor.fetchone()
+			if emp is None:
+				result['employment'] = ""
+			else:
+				result['employment'] = emp
 		else:
-			result['pob'] = {
-				'hospital': data2[1],
-				'city': data2[2],
-				'county': data2[3],
-				'state': data2[4]
-			}
-
-		get_parents_query = "SELECT * from _user_parents WHERE user_id = '%s'" % result['user_dbid']
-		cursor.execute(get_parents_query)
-		data3 = cursor.fetchone()
-		print 'data3:'
-		print data3
-		if data3 is None: 
-			result['parents'] = ""
-		else:
-			result['parents'] = {
-				'father': data3[1],
-				'mother': data3[2]
-			}
-
-		get_employment_query = "SELECT * from _user_employment WHERE user_id = '%s'" % result['user_dbid']
-		cursor.execute(get_employment_query)
-		data4 = cursor.fetchone()
-		print 'data4: '
-		print data4
-		if data4 is None:
 			result['employment'] = ""
-		else:
-			result['employment'] = data4
 
+		if data[14] != 0:
+			#pob
+			get_pob_query = "SELECT * from _user_place_of_birth WHERE user_id = '%s'" % result['dbid']
+			cursor.execute(get_pob_query)
+			pob = cursor.fetchone()
+			if pob is None: 
+				result['pob'] = None
+			else:
+				result['pob'] = {
+					'hospital': pob[1],
+					'city': pob[2],
+					'county': pob[3],
+					'state': pob[4]
+				}
+		else:
+			result['pob'] = ""
+
+		if data[15] != 0:
+			#parents
+			get_parents_query = "SELECT * from _user_parents WHERE user_id = '%s'" % result['dbid']
+			cursor.execute(get_parents_query)
+			prnts = cursor.fetchone()
+			if prnts is None: 
+				result['parents'] = ""
+			else:
+				result['parents'] = {
+					'father': prnts[1],
+					'mother': prnts[2]
+				}
+		else:
+			result['parents'] = ""
+		print "result"
+		print result
 		return jsonify(result)
 
 	elif request.method == 'POST':
@@ -465,6 +612,7 @@ def api_services(service_id):
 		events = []
 		for row in data:
 			event = {
+				'dbid': row[0],
 				'name': row[1],
 				'container': row[2],
 				'location': {
@@ -485,8 +633,6 @@ def api_services(service_id):
 		data = request.get_json()
 		print data
 		name = data['name']
-		contact = data['contact']
-		container = int(data['container'])
 		address = data['location']['address']
 		city = data['location']['city']
 		state = data['location']['state']
@@ -495,15 +641,22 @@ def api_services(service_id):
 		add_event_query = ""
 		if data['category'] == '0':
 			#physical nourishment
-			add_event_query = "INSERT INTO svc_physical values (default, '%s','%s','%s','%s','%s','%s','%s','%s')" % (name, container, address, city, state, zipcode, when, contact)
+			add_event_query = "INSERT INTO svc_physical (event_name, address, city, state, zipcode, date_time) values ('%s','%s','%s','%s','%s','%s')" % (name, address, city, state, zipcode, when)
+			if data['container'] != "":
+				add_event_query = "INSERT INTO svc_physical (event_name, container, address, city, state, zipcode, date_time) values ('%s','%s','%s','%s','%s','%s','%s')" % (name, int(data['container']), address, city, state, zipcode, when)
+			if data['contact'] != "":
+				add_event_query = "INSERT INTO svc_physical (event_name, container, address, city, state, zipcode, date_time, contact) values ('%s','%s','%s','%s','%s','%s','%s','%s')" % (name, int(data['container']), address, city, state, zipcode, when, data['contact'])
 		elif data['category'] == '1':
 			#wellness
-			add_event_query = "INSERT INTO svc_wellness values (default, '%s','%s','%s','%s','%s','%s','%s','%s')" % (name, container, address, city, state, zipcode, when, contact)
-		print 'query:'
-		print add_event_query
+			add_event_query = "INSERT INTO svc_wellness (event_name, address, city, state, zipcode, date_time) values ('%s','%s','%s','%s','%s','%s')" % (name, address, city, state, zipcode, when)
+			if data['container'] != "":
+				add_event_query = "INSERT INTO svc_wellness (event_name, container, address, city, state, zipcode, date_time) values ('%s','%s','%s','%s','%s','%s','%s')" % (name, int(data['container']), address, city, state, zipcode, when)
+			if data['contact'] != "":
+				add_event_query = "INSERT INTO svc_wellness (event_name, container, address, city, state, zipcode, date_time, contact) values ('%s','%s','%s','%s','%s','%s','%s','%s')" % (name, int(data['container']), address, city, state, zipcode, when, data['contact'])
 		cursor.execute(add_event_query)
 		conn.commit()
 		event_id = cursor.lastrowid
+
 		get_event_query = ""
 		if data['category'] == '0':
 			get_event_query = "SELECT * FROM svc_physical WHERE id = '%s'" % event_id
@@ -511,8 +664,6 @@ def api_services(service_id):
 			get_event_query = "SELECT * FROM svc_wellness WHERE id = '%s'" % event_id
 		cursor.execute(get_event_query)
 		event = cursor.fetchone()
-		print 'event'
-		print event
 		result = {
 			'name': event[1],
 			'container': event[2],
@@ -566,6 +717,42 @@ def api_log():
 	}
 	return jsonify(result)
 
+@app.route('/delete/<type>/<id>', methods=['GET'])
+def api_delete(type, id):
+	print type
+	print id
+	if type == "user":
+		nfc_tag_id = id
+		delete_user_query = "DELETE FROM users WHERE device = '%s'" % nfc_tag_id
+		cursor.execute(delete_user_query)
+		conn.commit()
+		result = 'User with NFC Tag ID %s has been removed from the database' % nfc_tag_id
+	elif type == "service":
+		svc_id = id
+		event_dbid = request.args.get('dbid')
+		print 'svc_id: %s' % svc_id
+		print 'event_dbid: %s' % event_dbid
+		if event_dbid is None:
+			result = 'Sorry, please specify the event to remove (DBID).'
+		else: 
+			if svc_id == '0':
+				#physical
+				delete_event_query = "DELETE FROM svc_physical WHERE id = '%s'" % event_dbid
+				cursor.execute(delete_event_query)
+				conn.commit()
+				result = 'Event (DBID: %s) of Physical Nourishment Service has been removed.' % event_dbid
+	
+			elif svc_id == '1':
+				delete_event_query = "DELETE FROM svc_wellness WHERE id = '%s'" % event_dbid
+				cursor.execute(delete_event_query)
+				conn.commit()
+				result = 'Event (DBID: %s) of Wellness Service has been removed.' % event_dbid
+
+			else:
+				result = 'Sorry, the service you requested does not have an event to remove.'
+	else:
+		result = 'Sorry, please try again.'
+	return result
 
 if (__name__) == "__main__":
 	app.run(debug=True)

@@ -1,25 +1,78 @@
-<button type="button" class="btn btn-sm btn-default"><a ui-sref="home.services">Back</a></button>
-<h2 id="physical">Physical Nourishment Service</h2>
-<hr>
-<button type="button" class="btn btn-default"><a ui-sref="home.add_event">Add an Event</a></button>
+<button type="button" class="btn btn-sm btn-default back"><a ui-sref="home.services">Back</a></button>
 
-<table class="table">
-	<thead>
-		<tr>
-			<th>Event Name</th>
-			<th>Container</th>
-			<th>Location</th>
-			<th>Date & Time</th>
-			<th>Contact</th>
-		</tr>
-	</thead>
-	<tbody>
-		<tr ng-repeat="event in physicalEventsArr track by $index">
-			<td>{{event.name}}</td>
-			<td>{{event.container}}</td>
-			<td>{{event.location.address}} {{event.location.city}} {{event.location.state}} {{event.location.zipcode}}</td>
-			<td>{{event.datetime}}</td>
-			<td>{{event.contact}}</td>
-		</tr>
-	</tbody>
-</table>
+<div class="service-page">
+	<h3 id="physical">Physical Nourishment Service</h3>
+	<hr>
+	<button type="button" class="btn btn-primary"><a ui-sref="home.add_event">New Event</a></button>
+
+	<table class="table">
+		<thead>
+			<tr>
+				<th></th>
+				<th>Event Name</th>
+				<th>Container</th>
+				<th>Location</th>
+				<th>Date & Time</th>
+				<th>Contact</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr ng-repeat="event in physicalEventsArr track by $index">
+				<td>
+					<a href="" ng-click="editEvent(this)"><span class="glyphicon glyphicon-pencil"></span></a>
+					<span ng-if="openEdit" class="remove"><a href="" ng-click="removeEvent($index)">Remove</a></span>
+					<span ng-if="openEdit" class="done"><a href="" ng-click="doneEditing($index, this)">Done</a></span>
+				</td>
+				<td ng-hide="openEdit">{{event.name}}</a></td>
+				<td ng-if="openEdit"><input type="text" class="form-control" placeholder="{{event.name}}" ng-model="eventEdited.name"></td>
+				<td ng-hide="openEdit">{{event.container}}</td>
+				<td ng-if="openEdit"><input type="number" min="1" max="11" class="form-control" placeholder="{{event.container}}" ng-model="eventEdited.container"></td>
+				<td ng-hide="openEdit">{{event.location.address}} {{event.location.city}} {{event.location.state}} {{event.location.zipcode}}</td>
+				<td ng-if="openEdit">
+					<input type="text" class="form-control" placeholder="{{event.location.address}}" ng-model="eventEdited.address">
+					<input type="text" class="form-control" placeholder="{{event.location.city}}" ng-model="eventEdited.city">
+					<input type="text" class="form-control" placeholder="{{event.location.state}}" ng-model="eventEdited.state" maxlength="2">
+					<input type="text" class="form-control" placeholder="{{event.location.zipcode}}" ng-model="eventEdited.zipcode">
+				</td>
+				<td ng-hide="openEdit">{{event.datetime}}</td>
+				<td ng-if="openEdit">
+					<input type="date" class="form-control" ng-model="editedDate">
+					<select class="form-control" ng-model="editedTime.hr">
+					<option value="1">1</option>
+					<option value="2">2</option>
+					<option value="3">3</option>
+					<option value="4">4</option>
+					<option value="5">5</option>
+					<option value="6">6</option>
+					<option value="7">7</option>
+					<option value="8">8</option>
+					<option value="9">9</option>
+					<option value="10">10</option>
+					<option value="11">11</option>
+					<option value="12">12</option>
+				</select>
+				<select class="form-control" ng-model="editedTime.min">
+					<option value="0">:00</option>
+					<option value="5">:05</option>
+					<option value="10">:10</option>
+					<option value="15">:15</option>
+					<option value="20">:20</option>
+					<option value="25">:25</option>
+					<option value="30">:30</option>
+					<option value="35">:35</option>
+					<option value="40">:40</option>
+					<option value="45">:45</option>
+					<option value="50">:50</option>
+					<option value="55">:55</option>
+				</select>
+				<select class="form-control" ng-model="editedTime.AmPm">
+					<option value="0">AM</option>
+					<option value="12">PM</option>
+				</select>
+				</td>
+				<td ng-hide="openEdit">{{event.contact}}</td>
+				<td ng-if="openEdit"><input type="text" class="form-control" placeholder="{{event.contact}}" ng-model="eventEdited.contact"></td>
+			</tr>
+		</tbody>
+	</table>
+</div>

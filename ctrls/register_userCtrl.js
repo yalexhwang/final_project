@@ -1,8 +1,11 @@
-mcApp.controller('registerCtrl', function($scope, $rootScope, $http, $state, $cookies, Upload, InputService) {
-	console.log('registerCtrl');
+mcApp.controller('registerCtrl', function($scope, $rootScope, $http, $state, $cookies, InputService) {
 	if ($rootScope.loggedIn == 0) {
 		$state.go('login');
 	}
+	$cookies.remove('newUser');
+	$cookies.remove('newNfc');
+	$cookies.remove('pob');
+	$cookies.remove('parents');
 
 	$scope.previewReady = 0;
 	$scope.enterPOB = 0;
@@ -14,7 +17,33 @@ mcApp.controller('registerCtrl', function($scope, $rootScope, $http, $state, $co
 	$scope.parents = {'father': "", 'mother': ""};
 	$scope.pob = {'hospital': "", 'city': "", 'county': "", 'state': ""};
 		
-		
+	$scope.openPOB = function() {
+		if ($scope.enterPOB == 0) {
+			$scope.enterPOB = 1;
+		} else {
+			$scope.enterPOB = 0;
+		}
+	};
+
+	$scope.openParents = function() {
+		if ($scope.enterParents == 0) {
+			$scope.enterParents = 1;
+		} else {
+			$scope.enterParents = 0;
+		}
+	}
+	// $scope.previewPhoto = function() {
+	// 	var img = document.getElementById('preview');
+	// 	console.log(img);
+	// 	var reader = new FileReader();
+	// 	reader.readAsDataURL(photo);
+	// 	reader.onload = function() {
+	// 		console.log(reader.result);
+	// 		img.innerHTML = "<img src=" + reader.result + ">"
+	// 		$scope.previewReady = 1;
+	// 	}
+	// };
+
 	$scope.register = function(file) {
 		//NFC exists or not
 		if (($scope.nfc == "") || ($scope.nfc == undefined)) {
@@ -48,6 +77,7 @@ mcApp.controller('registerCtrl', function($scope, $rootScope, $http, $state, $co
 		var photo = document.getElementById('file').files[0];
     console.log(photo);
     if (photo == undefined) {
+    	$scope.newUser.photo = "";
     	console.log($scope.newUser);
 			InputService.registerUser($scope.newUser)
 			.then(function success(rspns) {
@@ -68,22 +98,24 @@ mcApp.controller('registerCtrl', function($scope, $rootScope, $http, $state, $co
 				alert('Please try again.');
 			});
     } else {
-    	 if (photo.size > 200000) {
-	    	alert('It exceeds the size limit (2MB)');
+    	 if (photo.size > 1000000) {
+	    	alert('It exceeds the size limit (1MB)');
 	    } else {
-	    	console.log('!!!');
 	    	var reader = new FileReader();
 		    reader.readAsDataURL(photo);
 		    reader.onload = function() {
 		      console.log(reader.result);
 		      $scope.newUser.photo = reader.result;
-		      $scope.previewReady = 1;
-		      var img = document.getElementById('preview');
-		      img.innerHTML = "<img src=" + reader.result + ">"
+		     
 		    	console.log($scope.newUser);
 					InputService.registerUser($scope.newUser)
 					.then(function success(rspns) {
 						console.log(rspns);
+						if (rspns.data.user[8] !== "") {
+							rspns.data.user[8] = "Uploaded";
+						} else {
+							rspns.data.user[8] = "N/A";
+						}
 						$cookies.putObject('newUser', rspns.data.user);
 						if (rspns.data.nfc !== "") {
 							$cookies.putObject('newNfc', rspns.data.nfc);

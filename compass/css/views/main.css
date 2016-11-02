@@ -1,4 +1,21 @@
 /* line 1, ../../sass/views/main.scss */
-#main {
-  padding: 20px;
+#main-main {
+  width: 90%;
+  margin: auto;
+}
+/* line 5, ../../sass/views/main.scss */
+#main-main h3 {
+  color: navy;
+  margin: 30px;
+  text-align: center;
+}
+
+/* line 12, ../../sass/views/main.scss */
+.main-tables {
+  margin: 10px 0px 40px 0px;
+  font-size: 12px;
+}
+/* line 15, ../../sass/views/main.scss */
+.main-tables thead {
+  font-size: 11px;
 }

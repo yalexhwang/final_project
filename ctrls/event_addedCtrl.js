@@ -1,13 +1,22 @@
 mcApp.controller('event_addedCtrl', function($scope, $rootScope, $cookies, $state) {
-	console.log('event_addedCtrl');
 
 	if ($cookies.getObject('newEvent')) {
 		var event = $cookies.getObject('newEvent');
-		$scope.event = event;
+		console.log(event);
 		if (event.category == 0) {
-			$scope.cateogry = 'Physical Nourishment'
+			event.category = 'Physical Nourishment'
 		} else if (event.category == 1) {
-			$scope.cateogry = 'Wellness'
+			event.category = 'Wellness'
 		}
+		event.datetime = convertDate(event.datetime) + " " + convertTime(event.datetime);
+		if (event.container == null) {
+			event.container = "N/A";
+		}
+		if (event.contact == null) {
+			event.contact = "N/A";
+		}
+		$scope.event = event;
+	} else {
+		$state.go('home.add_event');
 	}
 });

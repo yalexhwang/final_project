@@ -1,0 +1,38 @@
+/* line 1, ../../sass/views/services.scss */
+#services-main {
+  width: 90%;
+  margin: auto;
+  padding: 60px;
+  display: flex;
+  flex-flow: row wrap;
+}
+/* line 7, ../../sass/views/services.scss */
+#services-main .btn-wrapper {
+  flex: 100%;
+  text-align: center;
+  margin: 10px;
+}
+
+/* line 14, ../../sass/views/services.scss */
+.service-page {
+  width: 90%;
+  margin: auto;
+  padding: 0px 20px;
+}
+/* line 18, ../../sass/views/services.scss */
+.service-page h2, .service-page h3 {
+  margin-top: 5px;
+}
+/* line 21, ../../sass/views/services.scss */
+.service-page button {
+  margin-bottom: 20px;
+  color: white;
+}
+/* line 24, ../../sass/views/services.scss */
+.service-page button a {
+  color: white;
+}
+/* line 30, ../../sass/views/services.scss */
+.service-page .remove, .service-page .done {
+  display: block;
+}

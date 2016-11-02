@@ -16,14 +16,17 @@ mcApp.controller('user_registeredCtrl', function($scope, $rootScope, $state, $co
 	if ($cookies.getObject('newNfc')) {
 		$scope.nfcRegistered = $cookies.getObject('newNfc');
 		$scope.withNfc = 1;
+		$cookies.remove('newNfc');
 	}
 	if ($cookies.getObject('pob')) {
 		$scope.pobRegistered = $cookies.getObject('pob');
 		$scope.withPOB = 1;
+		$cookies.remove('pob');
 	}
 	if ($cookies.getObject('parents')) {
 		$scope.parentsRegistered = $cookies.getObject('parents');
 		$scope.withParents = 1;
+		$cookies.remove('parents');
 	}
 	
 	console.log($scope.userRegistered);

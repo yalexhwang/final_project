@@ -1,0 +1,16 @@
+/* line 1, ../../sass/views/event_added.scss */
+#event_added-main {
+  width: 90%;
+  margin: auto;
+  text-align: center;
+}
+/* line 5, ../../sass/views/event_added.scss */
+#event_added-main .table {
+  width: 50%;
+  margin: 30px auto;
+  text-align: left;
+}
+/* line 10, ../../sass/views/event_added.scss */
+#event_added-main button {
+  margin: 10px;
+}

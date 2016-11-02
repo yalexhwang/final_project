@@ -1,71 +1,92 @@
-<form class="form-horizontal" ng-submit="add()">
-	<div class="form-group">
-		<label for="event-category">Service Category</label>
-		<select id="event-category" class="form-control" ng-model="event.category" required>
-			<option value="0">Physical Nourishment</option>
-			<option value="1">Wellness</option>
-		</select>
-	</div>
-	<div class="form-group">
-		<label for="event-name">Event Name</label>
-		<input tpye="text" id="event-name" class="form-control" ng-model="event.name" required>
-	</div>
-	<div class="form-group">
-		<label for="event-container">Container</label>
-		<input tpye="number" id="event-name" class="form-control" ng-model="event.container" min="1" max="11">
-	</div>
-	<div class="form-group">
-		<label for="event-location">Location</label>
-		<input type="text" class="form-control" placeholder="Street Address" ng-model="event.location.address">
-		<input type="text" class="form-control" placeholder="City" ng-model="event.location.city">
-		<input type="text" class="form-control" placeholder="State" ng-model="event.location.state" maxlength="2">
-		<input type="text" class="form-control" placeholder="Zipcode" ng-model="event.location.zipcode">
-	</div>
-	<div class="form-group">
-		<label for="event-date">Date</label>
-		<input type="date" class="form-control" id="event-time" ng-model="date" required>
-	</div>
-	<div class="form-group">
-		<label for="event-time">Time</label>
-		<div class="input-group" id="event-time">
-			<select class="form-control" ng-model="timeHr" required>
-				<option value="1">1</option>
-				<option value="2">2</option>
-				<option value="3">3</option>
-				<option value="4">4</option>
-				<option value="5">5</option>
-				<option value="6">6</option>
-				<option value="7">7</option>
-				<option value="8">8</option>
-				<option value="9">9</option>
-				<option value="10">10</option>
-				<option value="11">11</option>
-				<option value="12">12</option>
-			</select>
-			<select class="form-control" ng-model="timeMin" required>
-				<option value="0">:00</option>
-				<option value="5">:05</option>
-				<option value="10">:10</option>
-				<option value="15">:15</option>
-				<option value="20">:20</option>
-				<option value="25">:25</option>
-				<option value="30">:30</option>
-				<option value="35">:35</option>
-				<option value="40">:40</option>
-				<option value="45">:45</option>
-				<option value="50">:50</option>
-				<option value="55">:55</option>
-			</select>
-			<select class="form-control" ng-model="timeAmPm" required>
-				<option value="0">AM</option>
-				<option value="12">PM</option>
-			</select>
-		</div>
-	</div>
-	<div class="form-group">
-		<label for="event-contact">Contact</label>
-		<input type="text" id="event-contact" class="form-control" placeholder="Phone Number" ng-model="event.contact">
-	</div>
+<button type="button" class="btn btn-sm btn-default back"><a ui-sref="home.service">Back</a></button>
 
-	<button type="submit" class="btn btn-default">Submit</button>
-</form>
+<div id="add_event-main">
+	<form class="form-horizontal" ng-submit="add()">
+		<span class="required">* required</span>
+		<div class="form-group">
+			<label for="event-category" class="control-label col-sm-3">Service <span class="required">*</span></label>
+			<div class="col-sm-9">
+				<select id="event-category" class="form-control" ng-model="event.category" required>
+					<option value="0">Physical Nourishment</option>
+					<option value="1">Wellness</option>
+				</select>
+			</div>
+		</div>
+		<div class="form-group">
+			<label for="event-name" class="control-label col-sm-3">Event Name <span class="required">*</span></label>
+			<div class="col-sm-9">
+				<input type="text" id="event-name" class="form-control" ng-model="event.name" required>
+			</div>
+		</div>
+		<div class="form-group">
+			<label for="event-container" class="control-label col-sm-3">Container</label>
+			<div class="col-sm-9">
+				<input type="number" id="event-name" class="form-control" ng-model="event.container" min="1" max="11">
+			</div>
+		</div>
+		<div class="form-group">
+			<label for="event-location" class="control-label col-sm-3">Location <span class="required">*</span></label>
+			<div class="col-sm-9">
+				<input type="text" class="form-control" placeholder="Street Address" ng-model="event.location.address">
+				<input type="text" class="form-control" placeholder="City" ng-model="event.location.city">
+				<input type="text" class="form-control" placeholder="State" ng-model="event.location.state" maxlength="2">
+				<input type="text" class="form-control" placeholder="Zipcode" ng-model="event.location.zipcode">
+			</div>
+		</div>
+		<div class="form-group">
+			<label for="event-date" class="control-label col-sm-3">Date <span class="required">*</span></label>
+			<div class="col-sm-9">
+				<input type="date" class="form-control" id="event-time" ng-model="date" required>
+			</div>
+		</div>
+		<div class="form-group">
+			<label for="event-time" class="control-label col-sm-3">Time <span class="required">*</span></label>
+			<div class="col-sm-9">
+				<div class="input-group" id="event-time">
+					<select class="form-control time" ng-model="timeHr" required>
+						<option value="1">1</option>
+						<option value="2">2</option>
+						<option value="3">3</option>
+						<option value="4">4</option>
+						<option value="5">5</option>
+						<option value="6">6</option>
+						<option value="7">7</option>
+						<option value="8">8</option>
+						<option value="9">9</option>
+						<option value="10">10</option>
+						<option value="11">11</option>
+						<option value="12">12</option>
+					</select>
+					<select class="form-control time" ng-model="timeMin" required>
+						<option value="0">:00</option>
+						<option value="5">:05</option>
+						<option value="10">:10</option>
+						<option value="15">:15</option>
+						<option value="20">:20</option>
+						<option value="25">:25</option>
+						<option value="30">:30</option>
+						<option value="35">:35</option>
+						<option value="40">:40</option>
+						<option value="45">:45</option>
+						<option value="50">:50</option>
+						<option value="55">:55</option>
+					</select>
+					<select class="form-control time" ng-model="timeAmPm" required>
+						<option value="0">AM</option>
+						<option value="12">PM</option>
+					</select>
+				</div>
+			</div>
+		</div>
+		<div class="form-group">
+			<label for="event-contact" class="control-label col-sm-3">Contact</label>
+			<div class="col-sm-9">
+				<input type="text" id="event-contact" class="form-control" placeholder="Phone Number" ng-model="event.contact">
+			</div>
+		</div>
+
+		<div class="col-sm-offset-3">
+			<button type="submit" class="btn btn-default">Submit</button>
+		</div>
+	</form>
+</div>

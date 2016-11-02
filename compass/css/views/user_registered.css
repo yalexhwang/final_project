@@ -1,0 +1,16 @@
+/* line 1, ../../sass/views/user_registered.scss */
+#user_registered-main {
+  width: 90%;
+  margin: auto;
+  text-align: center;
+}
+/* line 5, ../../sass/views/user_registered.scss */
+#user_registered-main .table {
+  width: 50%;
+  margin: 30px auto;
+  text-align: left;
+}
+/* line 10, ../../sass/views/user_registered.scss */
+#user_registered-main button {
+  margin: 10px;
+}

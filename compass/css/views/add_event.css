@@ -1,0 +1,14 @@
+/* line 1, ../../sass/views/add_event.scss */
+#add_event-main {
+  width: 90%;
+  margin: auto;
+}
+/* line 4, ../../sass/views/add_event.scss */
+#add_event-main form {
+  width: 60%;
+  margin: 0px auto 30px auto;
+}
+/* line 10, ../../sass/views/add_event.scss */
+#add_event-main form button {
+  margin-left: 10px;
+}

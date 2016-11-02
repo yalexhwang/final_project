@@ -1,13 +1,15 @@
-MAIN
-	<table>
+<div id="main-main">
+	
+	<h3>Mini City Data Management Portal</h3>
+
+	<h4>NFC Devices <small>{{numOfNfc}}</small></h4>
+	<table class="table table-condensed main-tables">
 		<thead>
 			<tr>
 				<th>NFC Tag #</th>
 				<th>Container ID</th>
 				<th>Registered At</th>
-				<th>First Name</th>
-				<th>Middle Name</th>
-				<th>Last Name</th>
+				<th>Name</th>
 				<th>Age</th>
 				<th>Gender</th>
 				<th>Race</th>
@@ -19,9 +21,7 @@ MAIN
 				<td>{{nfc[0]}}</td>
 				<td>{{nfc[1]}}</td>
 				<td>{{nfc[2]}}</td>
-				<td>{{nfc[3]}}</td>
-				<td>{{nfc[4]}}</td>
-				<td>{{nfc[5]}}</td>
+				<td>{{nfc[3]}} {{nfc[4]}} {{nfc[5]}}</td>
 				<td>{{nfc[6]}}</td>
 				<td>{{nfc[7]}}</td>
 				<td>{{nfc[8]}}</td>
@@ -30,21 +30,26 @@ MAIN
 		</tbody>
 	</table>
 
-	<table>
+	<h4>Containers <small>{{numOfCont}}</small></h4>
+	<table class="table table-condensed main-tables">
 		<thead>
 			<tr>
 				<th>Container #</th>
 				<th>District</th>
+				<th>Address</th>
 				<th>Zip Code</th>
-				<th>NFC Tags Registered</th>
+				<th>Number of NFC Tags</th>
 			</tr>
 		</thead>
 		<tbody>
 	     <tr ng-repeat="cont in containerArr">
 				<td>{{cont[0]}}</td>
 				<td>{{cont[1]}}</td>
+				<td>{{cont[3]}} {{cont[4]}}, {{cont[6]}}</td>
 				<td>{{cont[2]}}</td>
-				<td>{{cont[3]}}</td>
+				<td>{{cont[7]}}</td>
 			</tr>
 		</tbody>
 	</table>
+
+</div>

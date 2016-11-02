@@ -1,18 +1,179 @@
-<button type="button" class="btn btn-sm btn-default"><a ui-sref="home.users">Back</a></button>
+<button type="button" class="btn btn-sm btn-default back"><a ui-sref="home.users">Back</a></button>
 
-<div>
-	<div class="photo-box">
-		<img src="http://www.placehold.it/200x200">
-	</div>
+<div id="user_detail-main">
 	<div class="summary-box">
-		<h3>{{user.name}} <small>{{user.device}}</small></h3>
-		{{user.gender}} {{user.age}}
-		{{user.dob}}
+		<img class="photo" src="{{user.photo}}">
+		<div class="summary">
+			<!-- NFC info -->
+			<div class="nfc" ng-hide="editUser">
+				<span class="tagId">{{user.device.nfc_tag_id}}</span>
+				<span>Container #{{user.device.container_id}} at {{user.device.registered_at}}</span>
+			</div>
 
-		Has ID: 
+			<div class="info-wrapper" ng-hide="editUser">
+				<!-- Name -->
+				<div class="name">{{user.name}}</div>
+				<!-- DOB -->
+				<div class="dob">{{user.dob}}</div>
+				<!-- Other Info -->
+				<div class="other">
+					<span>{{user.age}} years old </span>
+					<span>{{user.gender}}</span>
+					<span>{{user.race}}</span>
+				</div>
+			</div>
+			<div class="editOptions">
+				<span><a href="" ng-click="openEditUser()">Edit</a></span>
+			</div>
+			<div class="edit-box" ng-show="editUser">
+				<form ng-submit="updateUser()">
+					<div class="form-group">
+						<label>Name</label>
+						<input type="text" class="form-control" placeholder="{{user.name}}" ng-model="editedName">
+					</div>
+					<div class="form-group">
+						<label>Date of Birth</label>
+						<input type="date" class="form-control" placeholder="{{user.dob}}" ng-model="editedDOB">
+					</div>
+					<div class="form-group">
+						<label>Age</label>
+						<input type="number" class="form-control" min="1" max="99" placeholder="{{user.age}}" ng-model="editedAge">
+					</div>
+					<div class="form-group">
+						<label>Gender</label>
+						<select class="form-control" ng-model="editedGender">
+							<option value="f">Female</option>
+							<option value="m">Male</option>
+							<option value="o">Other</option>
+						</select>
+					</div>
+					<div class="form-group">
+						<label>Race</label>
+						<select class="form-control" ng-model="editedRace">
+							<option value="1">American Indian or Alaska Native</option>
+							<option value="2">Asian or Asian American</option>
+							<option value="3">Black or African American</option>
+							<option value="4">Native Hawaiian or Other Pacific Islander</option>
+							<option value="5">White</option>
+							<option value="6">Other</option>
+						</select>
+					</div>
+					<div class="form-group">
+						<button type="submit" class="btn btn-default btn-xs">Done</button>
+						<button type="button" class="btn btn-default btn-xs" ng-click="openEditUser()">Cancel</button>
+					</div>
+				</form>
+			</div>
+
+		</div>
 	</div>
+	
 	<div class="detail-box">
+		<div class="additional">
+			<h4>Additional Information</h4>
+			<table class="table">
+				<tr>
+					<td class="heading">Has ID 
+						 <span class="glyphicon glyphicon-pencil" ng-click="openEditHasID()"></span>
+						<a href="" class="done" ng-show="editHasID" ng-click="updateHasID()">Done</a></td>
+					<td ng-hide="editHasID">{{user.hasID}}</td>
+					<td ng-if="editHasID">
+						<select class="form-control" ng-model="has.hasID">
+							<option value="0">No</option>
+							<option value="1">Yes</option>
+						</select>
+					</td>
+				</tr>
+			</table>
+			<table class="table">
+				<tr>
+					<td class="heading">Employment</td>
+						 <!-- <span class="glyphicon glyphicon-pencil" ng-click=""></span> -->
+						<!-- <a href="" class="done" ng-show="" ng-click=>Done</a></td> -->
+					<td ng-hide="">{{user.employment}}</td>
+<!-- 					<td ng-if="">
+						<select ng-model="" class="form-control">
+							<option value="0">No</option>
+							<option value="1">Yes</option>
+						</select>
+					</td> -->
+				</tr>
+			</table>
+			<table class="table">
+				<thead>
+					<th>Place of Birth <span class="glyphicon glyphicon-pencil" ng-click="openEditPOB()"></span><a href="" class="done" ng-show="editPob" ng-click="updatePOB()">Done</a></th>
+					<th></th>
+				</thead>
+				<tbody>
+					<tr>
+						<td class="heading">Hospital</td>
+						<td ng-hide="editPob">{{user.pob.hospital}}</td>
+						<td ng-if="editPob">
+							<input type="text" class="form-control" placeholder="{{user.pob.hospital}}" ng-model="pob.hospital">
+						</td>
+					</tr>
+					<tr>
+						<td class="heading">City</td>
+						<td ng-hide="editPob">{{user.pob.city}}</td>
+						<td ng-if="editPob">
+							<input type="text" class="form-control" placeholder="{{user.pob.city}}" ng-model="pob.city">
+						</td>
+					</tr>
+					<tr>
+						<td class="heading">County</td>
+						<td ng-hide="editPob">{{user.pob.county}}</td>
+						<td ng-if="editPob">
+							<input type="text" class="form-control" placeholder="{{user.pob.county}}" ng-model="pob.county">
+						</td>
+					</tr>
+					<tr>
+						<td class="heading">State</td>
+						<td ng-hide="editPob">{{user.pob.state}}</td>
+						<td ng-if="editPob">
+							<input type="text" class="form-control" placeholder="{{user.pob.state}}" ng-model="pob.state">
+						</td>
+					</tr>
+				</tbody>
+			</table>
+			<table class="table">
+				<thead>
+					<tr>
+						<th>Parents' Full Name <span class="glyphicon glyphicon-pencil" ng-click="openEditParents()"></span><a href="" class="done" ng-show="editParents" ng-click="updateParents()">Done</a></th>
+						<th></th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td class="heading">Father</td>
+						<td ng-hide="editParents">{{user.parents.father}}</td>
+						<td ng-if="editParents">
+							<input type="text" class="form-control" placeholder="{{user.parents.father}}" ng-model="parents.father">
+						</td>
+					</tr>
+					<tr>
+						<td class="heading">Mother</td>
+						<td ng-hide="editParents">{{user.parents.mother}}</td>
+						<td ng-if="editParents">
+							<input type="text" class="form-control" placeholder="{{user.parents.mother}}" ng-model="parents.mother"></td>
+					</tr>
+				</tbody>
+			</table>
 
+			
+		</div>
+		<div class="activities">
+			<h4>Activities</h4>
+			<table class="table">
+				<tbody>
+					<tr>
+						<th></th>
+					</tr>
+					<tr>
+						<td></td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
 	</div>
 
 </div>

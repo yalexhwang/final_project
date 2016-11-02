@@ -1,76 +1,106 @@
-<table class="table">
-	<tr ng-if="withNfc">
-		<td>NFC Tag ID</td>
-		<td>{{nfcRegistered[1]}}</td>
-	</tr>
-	<tr>
-		<td>First Name</td>
-		<td>{{userRegistered[1]}}</td>
-	</tr>
-	<tr>
-		<td>Middle Name</td>
-		<td>{{userRegistered[2]}}</td>
-	</tr>
-	<tr>
-		<td>Last Name</td>
-		<td>{{userRegistered[3]}}</td>
-	</tr>
-	<tr>
-		<td>Age</td>
-		<td>{{userRegistered[4]}}</td>
-	</tr>
-	<tr>
-		<td>Gender</td>
-		<td>{{userRegistered[5]}}</td>
-	</tr>
-	<tr>
-		<td>Race</td>
-		<td>{{userRegistered[6]}}</td>
-	</tr>
-	<tr>
-		<td>DOB</td>
-		<td>{{userRegistered[7]}}</td>
-	</tr>
-	<tr>
-		<td>Has ID</td>
-		<td>{{userRegistered[13]}}</td>
-	</tr>
-</table>
+<div id="user_registered-main">
 
-<div ng-if="withPOB">
-	Place of Birth
-	<table class="table">
-		<tr>
-			<td>Hospital</td>
-			<td>{{pobRegistered[1]}}</td>
-		</tr>
-		<tr>
-			<td>City</td>
-			<td>{{pobRegistered[2]}}</td>
-		</tr>
-		<tr>
-			<td>County</td>
-			<td>{{pobRegistered[3]}}</td>
-		</tr>
-		<tr>
-			<td>State</td>
-			<td>{{pobRegistered[4]}}</td>
-		</tr>
+	<table class="table table-condensed">
+		<thead>
+			<tr>
+				<th>User Registered</th>
+				<th></th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr ng-if="withNfc">
+				<td>NFC Tag ID</td>
+				<td>{{nfcRegistered[1]}}</td>
+			</tr>
+			<tr>
+				<td>First Name</td>
+				<td>{{userRegistered[1]}}</td>
+			</tr>
+			<tr>
+				<td>Middle Name</td>
+				<td>{{userRegistered[2]}}</td>
+			</tr>
+			<tr>
+				<td>Last Name</td>
+				<td>{{userRegistered[3]}}</td>
+			</tr>
+			<tr>
+				<td>Age</td>
+				<td>{{userRegistered[4]}}</td>
+			</tr>
+			<tr>
+				<td>Gender</td>
+				<td>{{userRegistered[5]}}</td>
+			</tr>
+			<tr>
+				<td>Race</td>
+				<td>{{userRegistered[6]}}</td>
+			</tr>
+			<tr>
+				<td>DOB</td>
+				<td>{{userRegistered[7]}}</td>
+			</tr>
+			<tr>
+				<td>Photo</td>
+				<td>{{userRegistered[8]}}</td>
+			</tr>
+			<tr>
+				<td>Has ID</td>
+				<td>{{userRegistered[13]}}</td>
+			</tr>
+		</tbody>
 	</table>
-</div>
 
-<div ng-if="withParents">
-	Parents' Full Name
-	<table class="table">
-		<tr>
-			<td>Father's Full Name</td>
-			<td>{{parentsRegistered[1]}}</td>
-		</tr>
-		<tr>
-			<td>Mother's Full Name</td>
-			<td>{{parentsRegistered[2]}}</td>
-		</tr>
-	</table>
-</div>
+	<div ng-if="withPOB">
+		<table class="table">
+			<thead>
+				<tr>
+					<th>Place of Birth</th>
+					<th></th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td>Hospital</td>
+					<td>{{pobRegistered[1]}}</td>
+				</tr>
+				<tr>
+					<td>City</td>
+					<td>{{pobRegistered[2]}}</td>
+				</tr>
+				<tr>
+					<td>County</td>
+					<td>{{pobRegistered[3]}}</td>
+				</tr>
+				<tr>
+					<td>State</td>
+					<td>{{pobRegistered[4]}}</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+
+	<div ng-if="withParents">
+		<table class="table">
+			<thead>
+				<tr>
+					<th>Parents' Full Name</th>
+					<th></th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td>Father</td>
+					<td>{{parentsRegistered[1]}}</td>
+				</tr>
+				<tr>
+					<td>Mother</td>
+					<td>{{parentsRegistered[2]}}</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
 
 <button class="btn btn-default" type="button"><a ui-sref="home.users">OK</a></button>
+
+</div>

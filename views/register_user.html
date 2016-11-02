@@ -1,0 +1,117 @@
+<button type="button" class="btn btn-sm btn-default back"><a ui-sref="home.users">Back</a></button>
+
+
+<div id="register-main">
+	<form ng-submit=register() class="form-horizontal" name="form" id="register-form">
+		<span class="required">* required</span>
+		<div class="form-group">
+			<label for="holder-nfc" class="col-sm-3 control-label">NFC Tag ID <span class="required">*</span></label>
+			<div class="col-sm-9">
+				<input type="text" id="holder-nfc" class="form-control" ng-model="nfc">
+			</div>
+		</div>
+		<div class="form-group">
+			<div class="input group">
+				<label for="holder-fname" class="col-sm-3 control-label">First Name <span class="required">*</span></label>
+				<div class="col-sm-9">
+					<input type="text" id="holder-fname" class="form-control" ng-model="newUser.fname" required>
+				</div>
+				<label for="holder-mname" class="col-sm-3 control-label">Middle Name</label>	
+				<div class="col-sm-9">
+					<input type="text" id="holder-mname" class="form-control" ng-model="newUser.mname">
+				</div>
+				<label for="holder-lname" class="col-sm-3 control-label">Last Name <span class="required">*</span></label>
+				<div class="col-sm-9">
+					<input type="text" id="holder-lname" class="form-control" ng-model="newUser.lname" required>
+				</div>
+			</div>
+		</div>
+		<div class="form-group">
+			<label for="holder-age" class="col-sm-3 control-label">Age <span class="required">*</span></label>
+			<div class="col-sm-9">
+				<input tpye="number" id="holder-age" class="form-control" ng-model="newUser.age" min="1" required>
+			</div>
+		</div>
+		<div class="form-group">
+			<label for="holder-sex" class="col-sm-3 control-label">Gender <span class="required">*</span></label>
+			<div class="col-sm-9">
+				<select id="holder-sex" class="form-control" ng-model="newUser.gender" required>
+					<option value="f">Female</option>
+					<option value="m">Male</option>
+					<option value="o">Other</option>
+				</select>
+			</div>
+		</div>
+		<div class="form-group">
+			<label for="holder-race" class="col-sm-3 control-label">Race</label>	
+			<div class="col-sm-9">
+				<select id="holder-race" class="form-control" ng-model="newUser.race">
+					<option value="1">American Indian or Alaska Native</option>
+					<option value="2">Asian or Asian American</option>
+					<option value="3">Black or African American</option>
+					<option value="4">Native Hawaiian or Other Pacific Islander</option>
+					<option value="5">White</option>
+					<option value="6">Other</option>
+				</select>
+			</div>
+		</div>
+		<div class="form-group">
+			<label for="holder-dob" class="col-sm-3 control-label">Date of Birth <span class="required">*</span></label>
+			<div class="col-sm-9">
+				<input type="date" id="holder-dob" class="form-control" ng-model="dob">
+			</div>
+		</div>
+		<div class="form-group">
+			<label for="holder-photo" class="col-sm-3 control-label">Photo</label>
+			<div class="col-sm-9">
+				<input type="file" name="file" id="file" class="form-control" ng-model="file" ng-change="previewPhoto()">
+			</div>
+		</div>
+		<!-- <div id="preview" height="200" ng-show="previewReady"></div> -->
+		
+		<div class="form-group">
+			<div class="checkbox col-sm-offset-3">
+				<label>
+						<input type="checkbox" ng-click="openPOB()"> Enter Place of Birth
+				</label>
+			</div>
+		</div>
+		<div class="form-group" ng-show="enterPOB">
+			<label for="holder-pob" class="col-sm-3 control-label">Place of Birth</label>
+			<div class="col-sm-9">
+				<input type="text" class="form-control" placeholder="Hospital Name" ng-model="pob.hospital">
+				<input type="text" class="form-control" placeholder="City" ng-model="pob.city">
+				<input type="text" class="form-control" placeholder="County" ng-model="pob.county">
+				<input type="text" class="form-control" placeholder="State" ng-model="pob.state" maxlength="2">
+			</div>
+		</div>
+
+		<div class="form-group">
+			<div class="checkbox col-sm-offset-3">
+				<label>
+						<input type="checkbox" ng-click="openParents()"> Enter Parents' Full Name
+				</label>
+			</div>
+		</div>
+		<div class="form-group" ng-show="enterParents">
+			<label for="holder-parents" class="col-sm-3 control-label">Name of Parents</label>
+			<div class="col-sm-9">
+				<input type="text" class="form-control" placeholder="Father's full name" ng-model="parents.father">
+				<input type="text" class="form-control" placeholder="Mother's full (maiden) name" ng-model="parents.mother">
+			</div>
+		</div>
+
+		<div class="form-group">
+			<div class="checkbox col-sm-offset-3">
+				<label>
+					<input type="checkbox" ng-model="hasID"> Has an ID
+				</label>
+			</div>
+		</div>
+		<div class="form-group">
+			<div class="col-sm-offset-3">
+				<button type="submit" class="btn btn-default">Submit</button>
+			</div>
+		</div>
+	</form>
+</div>

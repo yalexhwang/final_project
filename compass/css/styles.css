@@ -1,13 +1,51 @@
 /* line 1, ../sass/views/main.scss */
-#main {
-  padding: 20px;
+#main-main {
+  width: 90%;
+  margin: auto;
+}
+/* line 5, ../sass/views/main.scss */
+#main-main h3 {
+  color: navy;
+  margin: 30px;
+  text-align: center;
+}
+
+/* line 12, ../sass/views/main.scss */
+.main-tables {
+  margin: 10px 0px 40px 0px;
+  font-size: 12px;
+}
+/* line 15, ../sass/views/main.scss */
+.main-tables thead {
+  font-size: 11px;
 }
 
 /* line 1, ../sass/views/login.scss */
+#login-main {
+  width: 90%;
+  margin: auto;
+}
+/* line 4, ../sass/views/login.scss */
+#login-main h1 {
+  text-align: center;
+  margin-top: 100px;
+}
+
+/* line 10, ../sass/views/login.scss */
 #login-form {
   width: 100%;
   max-width: 450px;
-  margin: auto;
+  margin: 40px auto;
+}
+/* line 14, ../sass/views/login.scss */
+#login-form button {
+  margin-left: 15px;
+}
+
+/* line 19, ../sass/views/login.scss */
+#errorMsg {
+  max-width: 450px;
+  text-align: center;
 }
 
 /* line 1, ../sass/views/register_nfc.scss */
@@ -33,14 +71,249 @@
   padding-bottom: 40px;
 }
 
-/* line 5, ../sass/styles.scss */
+/* line 1, ../sass/views/users.scss */
+#users-main {
+  width: 90%;
+  margin: auto;
+}
+/* line 6, ../sass/views/users.scss */
+#users-main .option-wrapper {
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: space-between;
+  margin: 20px 0px;
+}
+/* line 11, ../sass/views/users.scss */
+#users-main .option-wrapper button {
+  color: white;
+}
+/* line 13, ../sass/views/users.scss */
+#users-main .option-wrapper button a {
+  color: white;
+}
+/* line 17, ../sass/views/users.scss */
+#users-main .option-wrapper #searchBar {
+  flex: 0 200px;
+}
+/* line 21, ../sass/views/users.scss */
+#users-main table {
+  margin: 0px 0px 30px 0px;
+  font-size: 13px;
+}
+/* line 24, ../sass/views/users.scss */
+#users-main table thead {
+  font-size: 12px;
+}
+
+/* line 1, ../sass/views/userDetail.scss */
+#user_detail-main {
+  width: 90%;
+  margin: auto;
+  padding: 15px;
+}
+
+/* line 7, ../sass/views/userDetail.scss */
+.summary-box {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-around;
+  align-items: flex-start;
+}
+/* line 12, ../sass/views/userDetail.scss */
+.summary-box img {
+  padding: 10px;
+  width: 220px;
+  height: 260px;
+}
+/* line 17, ../sass/views/userDetail.scss */
+.summary-box .summary {
+  flex: 0 60%;
+  min-height: 260px;
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: flex-start;
+  margin-left: 15px;
+}
+/* line 24, ../sass/views/userDetail.scss */
+.summary-box .summary .editOptions {
+  flex: 1 100%;
+  height: 20px;
+}
+/* line 27, ../sass/views/userDetail.scss */
+.summary-box .summary .editOptions a {
+  color: navy;
+  font-size: 12px;
+}
+/* line 32, ../sass/views/userDetail.scss */
+.summary-box .summary .nfc {
+  height: 90px;
+  font-size: 12px;
+}
+/* line 35, ../sass/views/userDetail.scss */
+.summary-box .summary .nfc .tagId {
+  font-size: 30px;
+  font-weight: bold;
+  display: block;
+}
+/* line 41, ../sass/views/userDetail.scss */
+.summary-box .summary .info-wrapper {
+  display: flex;
+  flex-flow: row wrap;
+  height: 130px;
+}
+/* line 45, ../sass/views/userDetail.scss */
+.summary-box .summary .info-wrapper .name {
+  flex: 1 100%;
+  font-size: 24px;
+}
+/* line 49, ../sass/views/userDetail.scss */
+.summary-box .summary .info-wrapper .dob {
+  flex: 1 100%;
+  font-size: 16px;
+}
+/* line 53, ../sass/views/userDetail.scss */
+.summary-box .summary .info-wrapper .other {
+  flex: 1 100%;
+  font-size: 15px;
+}
+/* line 56, ../sass/views/userDetail.scss */
+.summary-box .summary .info-wrapper .other span {
+  display: block;
+}
+/* line 61, ../sass/views/userDetail.scss */
+.summary-box .summary .edit-box {
+  margin: 15px 5px;
+}
+
+/* line 71, ../sass/views/userDetail.scss */
+.detail-box {
+  width: 90%;
+  margin: 30px auto;
+}
+/* line 74, ../sass/views/userDetail.scss */
+.detail-box .done {
+  font-size: 13px;
+  font-weight: 400;
+  padding: 1px 5px;
+  color: navy;
+}
+/* line 80, ../sass/views/userDetail.scss */
+.detail-box .heading {
+  width: 30%;
+}
+
+/* line 1, ../sass/views/register.scss */
+#register-main {
+  width: 90%;
+  margin: auto;
+}
+/* line 4, ../sass/views/register.scss */
+#register-main h4 {
+  text-align: center;
+}
+
+/* line 10, ../sass/views/register.scss */
+#register-form {
+  width: 70%;
+  margin: 0px auto 40px auto;
+}
+
+/* line 1, ../sass/views/user_registered.scss */
+#user_registered-main {
+  width: 90%;
+  margin: auto;
+  text-align: center;
+}
+/* line 5, ../sass/views/user_registered.scss */
+#user_registered-main .table {
+  width: 50%;
+  margin: 30px auto;
+  text-align: left;
+}
+/* line 10, ../sass/views/user_registered.scss */
+#user_registered-main button {
+  margin: 10px;
+}
+
+/* line 1, ../sass/views/services.scss */
+#services-main {
+  width: 90%;
+  margin: auto;
+  padding: 60px;
+  display: flex;
+  flex-flow: row wrap;
+}
+/* line 7, ../sass/views/services.scss */
+#services-main .btn-wrapper {
+  flex: 100%;
+  text-align: center;
+  margin: 10px;
+}
+
+/* line 14, ../sass/views/services.scss */
+.service-page {
+  width: 90%;
+  margin: auto;
+  padding: 0px 20px;
+}
+/* line 18, ../sass/views/services.scss */
+.service-page h2, .service-page h3 {
+  margin-top: 5px;
+}
+/* line 21, ../sass/views/services.scss */
+.service-page button {
+  margin-bottom: 20px;
+  color: white;
+}
+/* line 24, ../sass/views/services.scss */
+.service-page button a {
+  color: white;
+}
+/* line 30, ../sass/views/services.scss */
+.service-page .remove, .service-page .done {
+  display: block;
+}
+
+/* line 1, ../sass/views/add_event.scss */
+#add_event-main {
+  width: 90%;
+  margin: auto;
+}
+/* line 4, ../sass/views/add_event.scss */
+#add_event-main form {
+  width: 60%;
+  margin: 0px auto 30px auto;
+}
+/* line 10, ../sass/views/add_event.scss */
+#add_event-main form button {
+  margin-left: 10px;
+}
+
+/* line 1, ../sass/views/event_added.scss */
+#event_added-main {
+  width: 90%;
+  margin: auto;
+  text-align: center;
+}
+/* line 5, ../sass/views/event_added.scss */
+#event_added-main .table {
+  width: 50%;
+  margin: 30px auto;
+  text-align: left;
+}
+/* line 10, ../sass/views/event_added.scss */
+#event_added-main button {
+  margin: 10px;
+}
+
+/* line 12, ../sass/styles.scss */
 body {
   height: 100%;
   display: flex;
   flex-flow: row wrap;
 }
 
-/* line 10, ../sass/styles.scss */
+/* line 17, ../sass/styles.scss */
 #navbar {
   width: 100%;
   padding: 10px;
@@ -49,15 +322,15 @@ body {
   flex-flow: row wrap;
   justify-content: space-between;
 }
-/* line 17, ../sass/styles.scss */
+/* line 24, ../sass/styles.scss */
 #navbar #title {
   flex: 1 0 30%;
 }
-/* line 19, ../sass/styles.scss */
+/* line 26, ../sass/styles.scss */
 #navbar #title span {
   font-size: 16px;
 }
-/* line 23, ../sass/styles.scss */
+/* line 30, ../sass/styles.scss */
 #navbar ul {
   padding-left: 0px;
   margin-bottom: 0px;
@@ -66,13 +339,31 @@ body {
   display: flex;
   flex-flow: row nowrap;
 }
-/* line 30, ../sass/styles.scss */
+/* line 37, ../sass/styles.scss */
 #navbar ul li {
   flex: 1 0 100px;
   padding-top: 1px;
 }
 
-/* line 37, ../sass/styles.scss */
+/* line 44, ../sass/styles.scss */
 #page-view {
   width: 100%;
+}
+
+/* line 48, ../sass/styles.scss */
+.back {
+  margin: 20px;
+  font-size: 17px;
+  color: black;
+}
+/* line 52, ../sass/styles.scss */
+.back a, .back a:active, .back a:hover, .back a:link {
+  color: black;
+  text-decoration: none;
+}
+
+/* line 58, ../sass/styles.scss */
+.required {
+  color: red;
+  font-size: 12px;
 }

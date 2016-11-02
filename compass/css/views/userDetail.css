@@ -1,0 +1,96 @@
+/* line 1, ../../sass/views/userDetail.scss */
+#user_detail-main {
+  width: 90%;
+  margin: auto;
+  padding: 15px;
+}
+
+/* line 7, ../../sass/views/userDetail.scss */
+.summary-box {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-around;
+  align-items: flex-start;
+}
+/* line 12, ../../sass/views/userDetail.scss */
+.summary-box img {
+  padding: 10px;
+  width: 220px;
+  height: 260px;
+}
+/* line 17, ../../sass/views/userDetail.scss */
+.summary-box .summary {
+  flex: 0 60%;
+  min-height: 260px;
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: flex-start;
+  margin-left: 15px;
+}
+/* line 24, ../../sass/views/userDetail.scss */
+.summary-box .summary .editOptions {
+  flex: 1 100%;
+  height: 20px;
+}
+/* line 27, ../../sass/views/userDetail.scss */
+.summary-box .summary .editOptions a {
+  color: navy;
+  font-size: 12px;
+}
+/* line 32, ../../sass/views/userDetail.scss */
+.summary-box .summary .nfc {
+  height: 90px;
+  font-size: 12px;
+}
+/* line 35, ../../sass/views/userDetail.scss */
+.summary-box .summary .nfc .tagId {
+  font-size: 30px;
+  font-weight: bold;
+  display: block;
+}
+/* line 41, ../../sass/views/userDetail.scss */
+.summary-box .summary .info-wrapper {
+  display: flex;
+  flex-flow: row wrap;
+  height: 130px;
+}
+/* line 45, ../../sass/views/userDetail.scss */
+.summary-box .summary .info-wrapper .name {
+  flex: 1 100%;
+  font-size: 24px;
+}
+/* line 49, ../../sass/views/userDetail.scss */
+.summary-box .summary .info-wrapper .dob {
+  flex: 1 100%;
+  font-size: 16px;
+}
+/* line 53, ../../sass/views/userDetail.scss */
+.summary-box .summary .info-wrapper .other {
+  flex: 1 100%;
+  font-size: 15px;
+}
+/* line 56, ../../sass/views/userDetail.scss */
+.summary-box .summary .info-wrapper .other span {
+  display: block;
+}
+/* line 61, ../../sass/views/userDetail.scss */
+.summary-box .summary .edit-box {
+  margin: 15px 5px;
+}
+
+/* line 71, ../../sass/views/userDetail.scss */
+.detail-box {
+  width: 90%;
+  margin: 30px auto;
+}
+/* line 74, ../../sass/views/userDetail.scss */
+.detail-box .done {
+  font-size: 13px;
+  font-weight: 400;
+  padding: 1px 5px;
+  color: navy;
+}
+/* line 80, ../../sass/views/userDetail.scss */
+.detail-box .heading {
+  width: 30%;
+}

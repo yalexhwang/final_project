@@ -1,0 +1,15 @@
+/* line 1, ../../sass/views/register.scss */
+#register-main {
+  width: 90%;
+  margin: auto;
+}
+/* line 4, ../../sass/views/register.scss */
+#register-main h4 {
+  text-align: center;
+}
+
+/* line 10, ../../sass/views/register.scss */
+#register-form {
+  width: 70%;
+  margin: 0px auto 40px auto;
+}

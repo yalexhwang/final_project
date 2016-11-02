@@ -1,21 +1,34 @@
-A new {{category}} event has been created:
-<table class="table">
-	<tr>
-		<td>Name</td>
-		<td>{{event.name}}</td>
-	</tr>
-	<tr>
-		<td>Where</td>
-		<td>{{event.address}} {{event.city}}, {{event.state}} {{event.zipcode}}</td>
-	</tr>
-	<tr>
-		<td>When</td>
-		<td>{{event.datetime}}</td>
-	</tr>
-	<tr>
-		<td>Contact</td>
-		<td>{{event.contact}}</td>
-	</tr>
-</table>
+<div id="event_added-main">
+	<table class="table">
+		<thead>
+			<tr>
+				<th>{{event.category}} Event</th>
+				<th></th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td>Name</td>
+				<td>{{event.name}}</td>
+			</tr>
+			<tr>
+				<td>Container</td>
+				<td>{{event.container}}</td>
+			</tr>
+			<tr>
+				<td>Where</td>
+				<td>{{event.address}} {{event.city}}, {{event.state}} {{event.zipcode}}</td>
+			</tr>
+			<tr>
+				<td>When</td>
+				<td>{{event.datetime}}</td>
+			</tr>
+			<tr>
+				<td>Contact</td>
+				<td>{{event.contact}}</td>
+			</tr>
+		</tbody>
+	</table>
 
-<button class="btn btn-default" type="button"><a ui-sref="home.services">OK</a></button>
+	<button class="btn btn-default" type="button"><a ui-sref="home.services">OK</a></button>
+</div>

@@ -3,6 +3,7 @@ mcApp.controller('add_eventCtrl', function($scope, $rootScope, $http, $state, $c
 
 	$scope.event = {
 		container: "",
+		contact: "",
 		location: {address: "", city: "", state: "", zipcode: ""}
 	};
 	$scope.add = function() {
@@ -24,15 +25,30 @@ mcApp.controller('add_eventCtrl', function($scope, $rootScope, $http, $state, $c
 			hour: hr.toString(),
 			min: min.toString()
 		};
+		if ($scope.event.container == null) {
+			$scope.event.container = "";
+		}
 		console.log($scope.event);
-		InputService.addEvent($scope.event)
-		.then(function success(rspns) {
-			console.log(rspns);
-			$cookies.putObject('newEvent', rspns.data);
-			$state.go('home.event_added')
-		}, function fail(rspns) {
-			console.log(rspns);
-		});
+		if ($scope.event.category == 0) {
+			InputService.addEvent($scope.event, 0)
+			.then(function success(rspns) {
+				console.log(rspns);
+				$cookies.putObject('newEvent', rspns.data);
+				$state.go('home.event_added')
+			}, function fail(rspns) {
+				console.log(rspns);
+			});
+		} else if ($scope.event.category == 1) {
+			InputService.addEvent($scope.event, 1)
+			.then(function success(rspns) {
+				console.log(rspns);
+				$cookies.putObject('newEvent', rspns.data);
+				$state.go('home.event_added')
+			}, function fail(rspns) {
+				console.log(rspns);
+			});
+		}
+		
 	};
 
 });

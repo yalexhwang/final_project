@@ -1,4 +1,4 @@
-var mcApp = angular.module('mcApp', ['ui.router', 'ngCookies', 'ui.bootstrap', 'ngFileUpload', 'duScroll']);
+var mcApp = angular.module('mcApp', ['ui.router', 'ngCookies', 'ui.bootstrap', 'duScroll']);
 var url = "http://localhost:5000";
 
 mcApp.service('AuthService', function($http, $rootScope, $cookies, $q) {
@@ -31,7 +31,6 @@ mcApp.service('AuthService', function($http, $rootScope, $cookies, $q) {
 		}).then(function success(rspns) {
 			if (rspns.data.passFail == 1) {
 				$rootScope.loggedIn = 1;
-				console.log("isLoggedIn true");
 				def.resolve(true);
 			} else {
 				$rootScope.loggedIn = 0;
@@ -113,8 +112,8 @@ mcApp.service('DataService', function($http, $rootScope, $q) {
 });
 
 mcApp.service('InputService', function($http, $rootScope, $q) {
-	var def = $q.defer();
 	this.registerUser = function(userObj) {
+		var def = $q.defer();
 		$http.post(url + '/register_user', userObj)
 		.then(function success(rspns) {
 			def.resolve(rspns);
@@ -124,8 +123,58 @@ mcApp.service('InputService', function($http, $rootScope, $q) {
 		return def.promise;
 	};
 
-	this.addEvent = function(eventObj) {
-		$http.post(url + '/add_event', eventObj)
+	this.editUser = function(obj, type) {
+		var def = $q.defer();
+		$http.post(url + '/edit_user', {
+			obj: obj,
+			type: type
+		})
+		.then(function success(rspns) {
+			def.resolve(rspns);
+		}, function fail(rspns) {
+			def.reject(rspns);
+		});
+		return def.promise;
+	};
+
+	this.addEvent = function(eventObj, svc_id) {
+		var def = $q.defer();
+		$http.post(url + '/services/' + svc_id, eventObj)
+		.then(function success(rspns) {
+			def.resolve(rspns);
+		}, function fail(rspns) {
+			def.reject(rspns);
+		});
+		return def.promise;
+	};
+
+	this.editEvent = function(eventObj) {
+		var def = $q.defer();
+		$http.post(url + '/edit_event', eventObj)
+		.then(function success(rspns) {
+			def.resolve(rspns);
+		}, function fail(rspns) {
+			def.reject(rspns);
+		});
+		return def.promise;
+	};
+
+});
+
+mcApp.service('DeleteService', function($http, $q) {
+	this.deleteEvent = function(svc_id, dbid) {
+		var def = $q.defer();
+		$http.get(url + '/delete/service/' + svc_id + '?dbid=' + dbid).then(function success(rspns) {
+			def.resolve(rspns);
+		}, function fail(rspns) {
+			def.reject(rspns);
+		});
+		return def.promise;
+	}
+
+	this.deleteUser = function(nfc_tag_id) {
+		var def = $q.defer();
+		$http.get(url + '/delete/user/' + nfc_tag_id)
 		.then(function success(rspns) {
 			def.resolve(rspns);
 		}, function fail(rspns) {
@@ -180,18 +229,13 @@ mcApp.config(function($stateProvider, $urlRouterProvider) {
 	})
 	.state('home.register_user', {
 		url: '/register_user',
-		templateUrl: 'views/register.html',
-		controller: 'registerCtrl'
+		templateUrl: 'views/register_user.html',
+		controller: 'register_userCtrl'
 	})
 	.state('home.user_registered', {
 		url: '/user_registered',
 		templateUrl: 'views/user_registered.html',
 		controller: 'user_registeredCtrl'
-	})
-	.state('home.users.find_user', {
-		url: '/find_user',
-		templateUrl: 'views/find_user.html',
-		controller: 'find_userCtrl'
 	})
 
 	.state('home.services', {
