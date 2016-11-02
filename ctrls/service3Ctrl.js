@@ -30,8 +30,8 @@ mcApp.controller('service3Ctrl', function($scope, $cookies, $state, InputService
 		}
 		DeleteService.deleteEvent(0, temp[index].dbid)
 		.then(function success(rspns) {
-			console.log(rspns);
 			$scope.openEdit = 0;
+			$state.go('home.service3');
 		}, function fail(rspns) {
 			console.log(rspns);
 		});

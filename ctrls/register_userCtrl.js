@@ -1,4 +1,4 @@
-mcApp.controller('registerCtrl', function($scope, $rootScope, $http, $state, $cookies, InputService) {
+mcApp.controller('register_userCtrl', function($scope, $rootScope, $http, $state, $cookies, InputService) {
 	if ($rootScope.loggedIn == 0) {
 		$state.go('login');
 	}

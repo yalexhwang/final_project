@@ -114,7 +114,7 @@ mcApp.service('DataService', function($http, $rootScope, $q) {
 mcApp.service('InputService', function($http, $rootScope, $q) {
 	this.registerUser = function(userObj) {
 		var def = $q.defer();
-		$http.post(url + '/register_user', userObj)
+		$http.post(url + '/users', userObj)
 		.then(function success(rspns) {
 			def.resolve(rspns);
 		}, function fail(rspns) {

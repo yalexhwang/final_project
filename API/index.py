@@ -66,119 +66,6 @@ def logout():
 	result = {'passFail': 1}
 	return jsonify(result)
 
-
-@app.route('/register_user', methods=['POST'])
-def register_user():
-	data = request.get_json()
-	print data
-	new_user_query = "INSERT INTO users (first_name, middle_name, last_name, age, gender, race, date_of_birth, photo, has_id) VALUES ('%s','%s','%s','%s','%s','%s','%s','%s','%s')" % (data['fname'], data['mname'], data['lname'], int(data['age']), data['gender'], data['race'], data['dob'], data['photo'], data['hasID'])
-	cursor.execute(new_user_query)
-	conn.commit()
-	new_user_id = cursor.lastrowid
-	result = {}
-	if data['nfc'] != "":
-		# NFC exists, create one after creating the user
-		today = dt.date.today()
-		nfc_quey = "INSERT INTO devices (nfc_tag_id, user_id, registered_at) VALUES ('%s', '%s', '%s')" % (data['nfc'], new_user_id, today)
-		cursor.execute(nfc_quey)
-		conn.commit()
-		new_nfc_id = cursor.lastrowid
-		has_device_query = "UPDATE users SET device = '%s' WHERE users.id = '%s'" % (data['nfc'], new_user_id)
-		cursor.execute(has_device_query)
-		conn.commit()
-		get_nfc_query = "SELECT * from devices WHERE id = '%s'" % new_nfc_id
-		cursor.execute(get_nfc_query)
-		nfc = cursor.fetchone()
-		result['nfc'] = nfc 
-	else: 
-		result['nfc'] = ""
-
-	if data['hasPOB'] == 1:
-		pob_query = "INSERT INTO _user_place_of_birth (hospital, city, county, state, user_id) VALUES ('%s','%s','%s','%s','%s')" % (data['pob']['hospital'], data['pob']['city'], data['pob']['county'], data['pob']['state'], new_user_id)
-		cursor.execute(pob_query)
-		conn.commit()
-		new_pob_id = cursor.lastrowid
-		has_pob_query = "UPDATE users SET place_of_birth = '%s' WHERE users.id = '%s'" % (new_pob_id, new_user_id)
-		cursor.execute(has_pob_query)
-		conn.commit()
-		get_pob_query = "SELECT * from _user_place_of_birth WHERE id = '%s'" % new_pob_id
-		cursor.execute(get_pob_query)
-		pob = cursor.fetchone()
-		result['pob'] = pob
-	else: 
-		result['pob'] = ""
-
-	if data['hasParents'] == 1:
-		parents_query = "INSERT INTO _user_parents (father_full_name, mother_full_name, user_id) VALUES ('%s','%s','%s')" % (data['parents']['father'], data['parents']['mother'], new_user_id)
-		cursor.execute(parents_query)
-		conn.commit()
-		new_parents_id = cursor.lastrowid
-		has_parents_query = "UPDATE users SET parents = '%s' WHERE users.id = '%s'" % (new_parents_id, new_user_id)
-		cursor.execute(has_parents_query)
-		conn.commit()
-		get_parents_query = "SELECT * from _user_parents WHERE id = '%s'" % new_parents_id
-		cursor.execute(get_parents_query)
-		parents = cursor.fetchone()
-		result['parents'] = parents
-	else: 
-		result['parents'] = ""
-		
-	get_user_query = "SELECT * FROM users WHERE id = '%s'" % new_user_id
-	cursor.execute(get_user_query)
-	user = cursor.fetchone()
-	result['user'] = user
-
-	print "result: "
-	print result
-	return jsonify(result)
-
-
-# @app.route('/add_event', methods=['POST'])
-# def add_event():
-# 	data = request.get_json()
-# 	print data
-# 	name = data['name']
-# 	contact = data['contact']
-# 	container = data['container']
-# 	address = data['location']['address']
-# 	city = data['location']['city']
-# 	state = data['location']['state']
-# 	zipcode = data['location']['zipcode']
-# 	when = data['datetime']['year'] + "-" + data['datetime']['month'] + "-" + data['datetime']['date'] + " " + data['datetime']['hour'] + ':' + data['datetime']['min'] + ":00"
-# 	add_event_query = ""
-# 	if data['category'] == '0':
-# 		#physical nourishment
-# 		add_event_query = "INSERT INTO svc_physical values (default, '%s','%s','%s','%s','%s','%s','%s','%s')" % (name, int(container), address, city, state, zipcode, when, contact)
-# 	elif data['category'] == '1':
-# 		#wellness
-# 		add_event_query = "INSERT INTO svc_wellness values (default, '%s','%s','%s','%s','%s','%s','%s','%s')" % (name, int(container), address, city, state, zipcode, when, contact)
-# 	print 'query:'
-# 	print add_event_query
-# 	cursor.execute(add_event_query)
-# 	conn.commit()
-# 	event_id = cursor.lastrowid
-# 	get_event_query = ""
-# 	if data['category'] == '0':
-# 		get_event_query = "SELECT * FROM svc_physical WHERE id = '%s'" % event_id
-# 	elif data['category'] == '1':
-# 		get_event_query = "SELECT * FROM svc_wellness WHERE id = '%s'" % event_id
-# 	cursor.execute(get_event_query)
-# 	event = cursor.fetchone()
-# 	print 'event'
-# 	print event
-# 	result = {
-# 		'name': event[1],
-# 		'container': event[2],
-# 		'address': event[3],
-# 		'city': event[4],
-# 		'state': event[5],
-# 		'zipcode': event[6],
-# 		'datetime': event[7],
-# 		'contact': event[8],
-# 		'category': data['category']
-# 	}
-# 	return jsonify(result)
-
 @app.route('/edit_user', methods=['POST'])
 def edit_user():
 	data = request.get_json()
@@ -345,11 +232,13 @@ def getData(where):
 	print "getData"
 	if where == "main":
 		nfc_query = "SELECT devices.nfc_tag_id, devices.container, devices.registered_at, u.first_name, u.middle_name, u.last_name, u.age, u.gender, u.race, u.date_of_birth from devices INNER JOIN users as u ON devices.user_id = u.id"
-		container_query ="SELECT c.*, count(devices.id) FROM containers as c INNER JOIN devices ON devices.container = c.id GROUP BY c.id"
+		container_query ="SELECT c.*, count(devices.id) FROM containers as c RIGHT JOIN devices ON devices.container = c.id GROUP BY c.id"
 		cursor.execute(nfc_query)
 		nfc = cursor.fetchall()
 		cursor.execute(container_query)
 		container = cursor.fetchall()
+		print 'container!'
+		print container
 		result = {			
 			'nfc': nfc,
 			'container': container
@@ -370,33 +259,98 @@ def getData(where):
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # API - - - - - - - - - - - - - - - - - - - - - - - - - -
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-@app.route('/users')
+@app.route('/users', methods=['GET', 'POST'])
 def api_all_users():
-	all_users_query = "SELECT * from users"
-	cursor.execute(all_users_query)
-	data = cursor.fetchall()
-	users = []
-	for row in data:
-		user = {
-			'dbid': row[0],
-			'first_name': row[1],
-			'middle_name': row[2],
-			'last_name': row[3],
-			'age': row[4],
-			'gender': row[5],
-			'race': row[6],
-			'dob': row[7],
-			'photo': row[8],
-			'employment': row[9],
-			'hasID': row[10],
-			'pob': row[11],
-			'parents': row[12],
-			'device': row[13]
-		}
-		users.append(user)
-	return jsonify(users)
+	if request.method == 'GET':
+		all_users_query = "SELECT * from users"
+		cursor.execute(all_users_query)
+		data = cursor.fetchall()
+		users = []
+		for row in data:
+			user = {
+				'dbid': row[0],
+				'first_name': row[1],
+				'middle_name': row[2],
+				'last_name': row[3],
+				'age': row[4],
+				'gender': row[5],
+				'race': row[6],
+				'dob': row[7],
+				'photo': row[8],
+				'employment': row[9],
+				'hasID': row[10],
+				'pob': row[11],
+				'parents': row[12],
+				'device': row[13]
+			}
+			users.append(user)
+		return jsonify(users)
+	elif request.method == 'POST':
+		data = request.get_json()
+		print data
+		new_user_query = "INSERT INTO users (first_name, middle_name, last_name, age, gender, race, date_of_birth, photo, has_id) VALUES ('%s','%s','%s','%s','%s','%s','%s','%s','%s')" % (data['fname'], data['mname'], data['lname'], int(data['age']), data['gender'], data['race'], data['dob'], data['photo'], data['hasID'])
+		cursor.execute(new_user_query)
+		conn.commit()
+		new_user_id = cursor.lastrowid
+		result = {}
+		if data['nfc'] != "":
+			# NFC exists, create one after creating the user
+			today = dt.date.today()
+			nfc_quey = "INSERT INTO devices (nfc_tag_id, user_id, registered_at) VALUES ('%s', '%s', '%s')" % (data['nfc'], new_user_id, today)
+			cursor.execute(nfc_quey)
+			conn.commit()
+			new_nfc_id = cursor.lastrowid
+			has_device_query = "UPDATE users SET device = '%s' WHERE users.id = '%s'" % (data['nfc'], new_user_id)
+			cursor.execute(has_device_query)
+			conn.commit()
+			get_nfc_query = "SELECT * from devices WHERE id = '%s'" % new_nfc_id
+			cursor.execute(get_nfc_query)
+			nfc = cursor.fetchone()
+			result['nfc'] = nfc 
+		else: 
+			result['nfc'] = ""
 
-@app.route('/users/<nfc_id>', methods=['GET', 'POST'])
+		if data['hasPOB'] == 1:
+			pob_query = "INSERT INTO _user_place_of_birth (hospital, city, county, state, user_id) VALUES ('%s','%s','%s','%s','%s')" % (data['pob']['hospital'], data['pob']['city'], data['pob']['county'], data['pob']['state'], new_user_id)
+			cursor.execute(pob_query)
+			conn.commit()
+			new_pob_id = cursor.lastrowid
+			has_pob_query = "UPDATE users SET place_of_birth = '%s' WHERE users.id = '%s'" % (new_pob_id, new_user_id)
+			cursor.execute(has_pob_query)
+			conn.commit()
+			get_pob_query = "SELECT * from _user_place_of_birth WHERE id = '%s'" % new_pob_id
+			cursor.execute(get_pob_query)
+			pob = cursor.fetchone()
+			result['pob'] = pob
+		else: 
+			result['pob'] = ""
+
+		if data['hasParents'] == 1:
+			parents_query = "INSERT INTO _user_parents (father_full_name, mother_full_name, user_id) VALUES ('%s','%s','%s')" % (data['parents']['father'], data['parents']['mother'], new_user_id)
+			cursor.execute(parents_query)
+			conn.commit()
+			new_parents_id = cursor.lastrowid
+			has_parents_query = "UPDATE users SET parents = '%s' WHERE users.id = '%s'" % (new_parents_id, new_user_id)
+			cursor.execute(has_parents_query)
+			conn.commit()
+			get_parents_query = "SELECT * from _user_parents WHERE id = '%s'" % new_parents_id
+			cursor.execute(get_parents_query)
+			parents = cursor.fetchone()
+			result['parents'] = parents
+		else: 
+			result['parents'] = ""
+			
+		get_user_query = "SELECT * FROM users WHERE id = '%s'" % new_user_id
+		cursor.execute(get_user_query)
+		user = cursor.fetchone()
+		result['user'] = user
+
+		print "result: "
+		print result
+		return jsonify(result)
+
+
+@app.route('/users/<nfc_id>', methods=['GET'])
 def api_users(nfc_id):
 	if request.method == 'GET':
 		get_user_query = "SELECT d.nfc_tag_id, d.container, d.registered_at, u.* FROM users as u INNER JOIN devices as d ON u.id = d.user_id WHERE d.nfc_tag_id = '%s'" % nfc_id
@@ -466,65 +420,6 @@ def api_users(nfc_id):
 			result['parents'] = ""
 		print "result"
 		print result
-		return jsonify(result)
-
-	elif request.method == 'POST':
-		data = request.get_json()
-		new_user_query = "INSERT INTO users (first_name, middle_name, last_name, age, gender, race, date_of_birth, has_id) VALUES ('%s','%s','%s','%s','%s','%s','%s','%s')" % (data['fname'], data['mname'], data['lname'], int(data['age']), data['gender'], data['race'], data['dob'], data['hasID'])
-		cursor.execute(new_user_query)
-		conn.commit()
-		new_user_id = cursor.lastrowid
-
-		result = {}
-		if data['nfc'] != "":
-			# NFC exists, create one after creating the user
-			today = dt.date.today()
-			print 'today: %s' % today
-			nfc_quey = "INSERT INTO devices (nfc_tag_id, user_id, registered_at) VALUES ('%s', '%s', '%s')" % (data['nfc'], new_user_id, today)
-			cursor.execute(nfc_quey)
-			conn.commit()
-			new_nfc_id = cursor.lastrowid
-			get_nfc_query = "SELECT * from devices WHERE id = '%s'" % new_nfc_id
-			cursor.execute(get_nfc_query)
-			nfc = cursor.fetchone()
-			print "nfc:"
-			print nfc
-			result['nfc'] = nfc 
-		else: 
-			result['nfc'] = ""
-
-		if data['hasPOB'] == 1:
-			pob_query = "INSERT INTO _user_place_of_birth (hospital, city, county, state, user_id) VALUES ('%s','%s','%s','%s','%s')" % (data['pob']['hospital'], data['pob']['city'], data['pob']['county'], data['pob']['state'], new_user_id)
-			cursor.execute(pob_query)
-			conn.commit()
-			new_pob_id = cursor.lastrowid
-			get_pob_query = "SELECT * from _user_place_of_birth WHERE id = '%s'" % new_pob_id
-			cursor.execute(get_pob_query)
-			pob = cursor.fetchone()
-			print "pob entered: "
-			print pob
-			result['pob'] = pob
-		else: 
-			result['pob'] = ""
-
-		if data['hasParents'] == 1:
-			parents_query = "INSERT INTO _user_parents (father_full_name, mother_full_name, user_id) VALUES ('%s','%s','%s')" % (data['parents']['father'], data['parents']['mother'], new_user_id)
-			cursor.execute(parents_query)
-			conn.commit()
-			new_parents_id = cursor.lastrowid
-			print 'new_parents_id: %s' % new_parents_id
-			get_parents_query = "SELECT * from _user_parents WHERE id = '%s'" % new_parents_id
-			cursor.execute(get_parents_query)
-			parents = cursor.fetchone()
-			print "parents entered: "
-			print parents
-			result['parents'] = parents
-		else: 
-			result['parents'] = ""
-		get_user_query = "SELECT * FROM users WHERE id = '%s'" % new_user_id
-		cursor.execute(get_user_query)
-		user = cursor.fetchone()
-		result['user'] = user
 		return jsonify(result)
 
 @app.route('/containers/<container_id>', methods=['GET', 'POST'])
@@ -643,9 +538,9 @@ def api_services(service_id):
 			#physical nourishment
 			add_event_query = "INSERT INTO svc_physical (event_name, address, city, state, zipcode, date_time) values ('%s','%s','%s','%s','%s','%s')" % (name, address, city, state, zipcode, when)
 			if data['container'] != "":
-				add_event_query = "INSERT INTO svc_physical (event_name, container, address, city, state, zipcode, date_time) values ('%s','%s','%s','%s','%s','%s','%s')" % (name, int(data['container']), address, city, state, zipcode, when)
+				add_event_query = "INSERT INTO svc_physical (event_name, container_id, address, city, state, zipcode, date_time) values ('%s','%s','%s','%s','%s','%s','%s')" % (name, int(data['container']), address, city, state, zipcode, when)
 			if data['contact'] != "":
-				add_event_query = "INSERT INTO svc_physical (event_name, container, address, city, state, zipcode, date_time, contact) values ('%s','%s','%s','%s','%s','%s','%s','%s')" % (name, int(data['container']), address, city, state, zipcode, when, data['contact'])
+				add_event_query = "INSERT INTO svc_physical (event_name, container_id, address, city, state, zipcode, date_time, contact) values ('%s','%s','%s','%s','%s','%s','%s','%s')" % (name, int(data['container']), address, city, state, zipcode, when, data['contact'])
 		elif data['category'] == '1':
 			#wellness
 			add_event_query = "INSERT INTO svc_wellness (event_name, address, city, state, zipcode, date_time) values ('%s','%s','%s','%s','%s','%s')" % (name, address, city, state, zipcode, when)
@@ -682,7 +577,8 @@ def api_log():
 	nfc_tag_id = request.args.get('user')
 	svc_id = request.args.get('svc')
 	cont_id = request.args.get('cont')
-
+	print 'nfc_tag: %s' % nfc_tag_id
+	print 'svc: %s' % svc_id
 	if nfc_tag_id == None:
 		return 'Error! NFC Tag ID is not provided.'
 	if svc_id == None:
@@ -690,32 +586,38 @@ def api_log():
 
 	get_user_query = "SELECT user_id FROM devices WHERE nfc_tag_id = '%s'" % nfc_tag_id
 	cursor.execute(get_user_query)
-	user_id = int(cursor.fetchone()[0]) 
-	print 'user id: %s' % user_id
-	log_query = ""
-	if cont_id == None:
-		log_query = "INSERT INTO logs (service_id, user_id) VALUES ('%s', '%s')" % (svc_id, user_id)
-	else: 
-		log_query = "INSERT INTO logs (service_id, user_id, container_id) VALUES ('%s', '%s', '%s')" % (svc_id, user_id, cont_id)
-	cursor.execute(log_query)
-	conn.commit()
-	log_id = cursor.lastrowid
-	print 'log id: %s' % log_id
-	get_log_query = "SELECT logs.*, users.first_name, users.middle_name, users.last_name FROM logs INNER JOIN users ON logs.user_id = users.id WHERE logs.id = '%s'" % log_id
-	cursor.execute(get_log_query)
-	log = cursor.fetchone()
-	result = {
-		'service_id': log[1],
-		'nfc_tag_id': nfc_tag_id,
-		'user': {
-			'first_name': log[5],
-			'middle_name': log[6],
-			'last_name': log[7]
-		},
-		'container_id': log[3],
-		'timestamp': log[4]
-	}
-	return jsonify(result)
+	print 'ddd'
+	user = cursor.fetchone()
+	print user
+	if user is None:
+		return 'Error! No user is found with the NFC Tag ID provided.'
+	else:
+		user_id = int(user[0]) 
+		print 'user id: %s' % user_id
+		log_query = ""
+		if cont_id == None:
+			log_query = "INSERT INTO logs (service_id, user_id, nfc_tag_id) VALUES ('%s', '%s', '%s')" % (svc_id, user_id, nfc_tag_id)
+		else: 
+			log_query = "INSERT INTO logs (service_id, user_id, container_id, nfc_tag_id) VALUES ('%s', '%s', '%s', '%s')" % (svc_id, user_id, cont_id, nfc_tag_id)
+		cursor.execute(log_query)
+		conn.commit()
+		log_id = cursor.lastrowid
+		print 'log id: %s' % log_id
+		get_log_query = "SELECT logs.*, users.first_name, users.middle_name, users.last_name FROM logs INNER JOIN users ON logs.user_id = users.id WHERE logs.id = '%s'" % log_id
+		cursor.execute(get_log_query)
+		log = cursor.fetchone()
+		result = {
+			'service_id': log[1],
+			'nfc_tag_id': log[4],
+			'user': {
+				'first_name': log[6],
+				'middle_name': log[7],
+				'last_name': log[8]
+			},
+			'container_id': log[3],
+			'timestamp': log[5]
+		}
+		return jsonify(result)
 
 @app.route('/delete/<type>/<id>', methods=['GET'])
 def api_delete(type, id):
