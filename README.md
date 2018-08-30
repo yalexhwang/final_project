@@ -1,6 +1,6 @@
 # Mini City 2
 
-For my final project at DigitalCrafts, I redesigned the MVP I built for Mini City at Goodie Nation Hackathon. I wanted to restructure it to have an independent API and have Admin Portal to interact with the database using the API, in attempt to increase scalability and to have an option of making some data open to public.
+For my final project at DigitalCrafts, I redesigned the MVP I built for Mini City at Goodie Nation Hackathon in 2016. I wanted to restructure it to have an independent API and have Admin Portal to interact with the database using the API, in attempt to increase scalability and to have an option of making some data open to public.
 In Admin Portal, you can access current data including users, NFC devices, events, and containers. You can register a new user, add a new event, or edit/delete an existing user or event.
 
 <a href="https://youtu.be/z4rPAW134Aw" target="_blank"><img src="http://www.yalexhwang.com/img-stash/demo-mini-thumb.png" width="460" height="auto"></a>
@@ -12,17 +12,13 @@ In Admin Portal, you can access current data including users, NFC devices, event
 
 ##Technologies & Frameworks 
 - HTML
-- CSS/SASS
-  - Compass
+- CSS/SASS, Compass
 - Bootstrap, UI Bootstrap
 - JavaScript
 - AngularJS
-  - UI Router
-- Python
-  - Flask
+- Python, Flask
 - MySQL
 
-##API Documentation
 
 <img src="http://www.yalexhwang.com/img-stash/mini-api-1.png" width="460" height="auto">
 <img src="http://www.yalexhwang.com/img-stash/mini-api-2.png" width="460" height="auto">
